@@ -1,6 +1,6 @@
 import React from "react";
 
-import "antd/dist/antd.css";
+import {DatePicker, message} from "antd";
 
 class AddInfo extends React.Component{
     test(){
@@ -22,8 +22,9 @@ class AddInfo extends React.Component{
                     </div>
                     <button onClick={this.props.addLink} type="button"
                             className="btn btn-default radius">提交</button>
-                    
+
                 </form>
+                    <DatePicker />
             </div>
         )
     }
