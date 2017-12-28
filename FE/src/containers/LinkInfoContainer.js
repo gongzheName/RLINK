@@ -8,10 +8,7 @@ import {connect} from "react-redux";
 import AddInfo from "../components/AdminOperation/LinkBusiness/AddInfo";
 
 import {
-    addLink,
-    delLink,
-    modLink,
-    selLink
+    addLink
 } from "../actions/index";
 
 function mapStateToProps(state) {
@@ -22,10 +19,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        addLink: () => dispatch(addLink()),
-        delLink: () => dispatch(delLink()),
-        modLink: () => dispatch(modLink()),
-        selLink: () => dispatch(selLink())
+        addLink: () => dispatch(addLink())
     }
 }
 

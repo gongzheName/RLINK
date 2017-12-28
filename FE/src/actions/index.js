@@ -6,7 +6,7 @@ import {
 } from "./constants";
 
 // 新增
-export function addLink() {
+export function addLink(ADD) {
     alert("新增");
 }
 

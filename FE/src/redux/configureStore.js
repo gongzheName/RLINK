@@ -22,7 +22,6 @@ const reducer = combineReducers({
     RLink
 });
 
-console.log(reducer);
 
 const configureStore = (initialState) =>
     createStorewithMiddleware(reducer,initialState);

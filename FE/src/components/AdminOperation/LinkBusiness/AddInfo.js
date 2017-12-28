@@ -1,6 +1,23 @@
 import React from "react";
 
-import {DatePicker, message} from "antd";
+import {
+    AutoComplete,
+    Button,
+    Cascader,
+    Checkbox,
+    Col,
+    DatePicker,
+    Form,
+    Icon,
+    Input,
+    Row,
+    Select,
+    Tooltip} from "antd";
+
+const FormItem = Form.Item;
+const Option = Select.Option;
+const AutoCompleteOption = AutoComplete.Option;
+
 
 class AddInfo extends React.Component{
     test(){
@@ -11,6 +28,18 @@ class AddInfo extends React.Component{
             <div>
                 <h1>链接后台管理-新增</h1>
                 <hr/>
+
+                <Form>
+
+                    <FormItem>
+                        <Input
+                            prefix={<Icon type="user" style={{fontSize:"13px"}} />}
+                            placeholder="UserName"
+                        />
+                    </FormItem>
+
+                </Form>
+
                 <form action="">
                     <div className="form-group">
                         <label htmlFor="name">链接名称</label>
