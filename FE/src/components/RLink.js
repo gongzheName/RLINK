@@ -9,7 +9,8 @@ import {
 import routerArrs from "../routes/index";
 
 import Nav1 from "./layout/content/Nav1";
-import WrappedRegistrationForm from "./AdminOperation/user/UserAdd";
+import UserAdd from "./AdminOperation/user/UserAdd";
+import UserQuery from "./AdminOperation/user/UserQuery";
 
 const LinkRouters = (routerArr) => {
     return routerArr.map( (e,i) => {
@@ -29,7 +30,8 @@ class RLink extends React.Component{
                 <div>
                     {LinkRouters(routerArrs)}
 
-                    <Route path="/usr-mng" component={WrappedRegistrationForm} />
+                    <Route path="/usr-mng" component={UserQuery} />
+                    <Route path="/usr-add" component={UserAdd} />
                     <Route path="/link-mng" component={Nav1} />
                     <Route path="/ctgr-mng" component={Nav1} />
                     <Route path="/icon-mng" component={Nav1} />

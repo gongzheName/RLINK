@@ -1,4 +1,4 @@
-import HeaderComponent from "../components/layout/header/HeaderComponent"
+import HeaderComponent from "../components/layout/header/HeaderComponent";
 import Nav1 from "../components/layout/content/Nav1";
 import ManagerOperation from "../components/layout/content/ManagerOperation";
 import Nav3 from "../components/layout/content/Nav3";

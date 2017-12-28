@@ -16,6 +16,8 @@ import {
     DatePicker
 } from 'antd';
 import axios from "axios";
+import DialogModal from "../../modal/index";
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
@@ -76,13 +78,24 @@ class RegistrationForm extends React.Component{
                 };*/
 
                 console.log('Received values of form: ', values);
-                /*axios.post("http://localhost:80/rl/index?action=user:userAdd", values)
+                axios.get("../../../src/server/userAdd.json", values)
                     .then(function(data){
                         console.log(data);
+                        DialogModal.confirm({
+                            title: "成功",
+                            content: "是否跳转到首页",
+                            func: function(){
+                                window.location.href = "/";
+                            },
+                            funcR: function(){
+
+                            }
+                        })
+
                     }).catch(function(err){
                     console.error(err);
-                })*/
-                var instance = axios.create({
+                })
+                /*var instance = axios.create({
                     baseURL: 'http://localhost:80/rl/',
                     method: "post",
                     headers: {'X-Requested-With': 'XMLHttpRequest'},
@@ -107,7 +120,7 @@ class RegistrationForm extends React.Component{
                 instance.post("/index", JSON.stringify(values))
                     .then(function(data){
                         console.log(data)
-                    })
+                    })*/
             });
         });
     }
@@ -334,6 +347,6 @@ class RegistrationForm extends React.Component{
     }
 }
 
-const WrappedRegistrationForm = Form.create()(RegistrationForm);
+const UserAdd = Form.create()(RegistrationForm);
 
-export default WrappedRegistrationForm;
+export default UserAdd;

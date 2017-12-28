@@ -27,6 +27,12 @@ module.exports = {
         }, {
             test: /\.css$/,
             loader: "style-loader!css-loader"
+        }, {
+            test: /\.less$/,
+            loader: "style-loader!css-loader!less-loader"
+        }, {
+            test: /\.scss$/,
+            loader: "style-loader!css-loader!sass-loader"
         }]
     }
     /*,devServer:{
