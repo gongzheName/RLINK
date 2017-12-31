@@ -72,8 +72,10 @@ class UserQueryRes extends React.Component {
                     data1[i].key = i;
                     if(data1[i].gender == "1"){
                         data1[i].gender = "男";
-                    }else{
+                    }else if(data1[i].gender == "2"){
                         data1[i].gender = "女";
+                    }else{
+                        data1[i].gender = "性别不明？伪娘：女汉子";
                     }
                 }
                 dataarr = data1;
