@@ -35,18 +35,20 @@ module.exports = {
             loader: "style-loader!css-loader!sass-loader"
         }]
     }
-    /*,devServer:{
-        proxy: {
-            "*": {
-                target: "http://localhost:8086"
-            }
-        },
+    ,devServer:{
         historyApiFallback: true,
         hot: true,
         inline: true,
-        port: port,
-        stats: { colors: true }
-    },*/
+        stats: { colors: true },
+        proxy: {
+            "/api": {
+                target: "http://127.0.0.1:80",
+                //pathRewrite: {'^/cross_domain/php' : '/cross_domain/php'},
+                changeOrigin: true,
+                secure: false
+            }
+        }
+    }
     /*,devServer: {
         host: 'localhost',
         port: '8888',

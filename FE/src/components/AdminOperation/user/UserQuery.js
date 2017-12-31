@@ -2,6 +2,7 @@ import React from "react";
 
 import DialogModal from "../../modal/index";
 import { Form, Row, Col, Input, Button, Icon, Select } from 'antd';
+import axios from "axios";
 import "./index.less";
 import queryColumnData from "./queryColumnData";
 import UserQueryRes from "./UserQueryRes";
@@ -17,6 +18,19 @@ class AdvancedSearchForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             console.log('Received values of form: ', values);
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", "/api", true);
+            xhr.onreadystatechange = function(){
+                if(xhr.status==200 && xhr.readyState==4){
+                    console.log(xhr.responseText);
+                }
+            }
+            xhr.send();
+            /*axios.get("/api/column").then(function(data){
+                console.log(data.data);
+            }).catch(function(err){
+                console.error(err)
+            })*/
         });
     }
 
