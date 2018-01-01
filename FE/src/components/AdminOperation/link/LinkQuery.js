@@ -4,8 +4,8 @@ import DialogModal from "../../modal/index";
 import { Form, Row, Col, Input, Button, Icon, Select } from 'antd';
 import axios from "axios";
 import "./index.less";
-import queryColumnData from "./queryColumnData";
-import UserQueryRes from "./UserQueryRes";
+import queryColumnData_link from "./queryColumnData_link";
+import LinkQueryRes from "./LinkQueryRes";
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -29,7 +29,7 @@ class AdvancedSearchForm extends React.Component {
 
     // To generate mock Form.Item
     getFields() {
-        const c = queryColumnData.length;
+        const c = queryColumnData_link.length;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: { span: 8 },
@@ -37,37 +37,37 @@ class AdvancedSearchForm extends React.Component {
         };
         const children = [];
         for (let i = 0; i < c; i++) {
-            if(queryColumnData[i].select){
+            if(queryColumnData_link[i].select){
                 children.push(
                     <Col span={8} key={i}>
 
-                        <FormItem {...formItemLayout} label={queryColumnData[i].col_name}>
-                            {getFieldDecorator(queryColumnData[i].lb_for, {
+                        <FormItem {...formItemLayout} label={queryColumnData_link[i].col_name}>
+                            {getFieldDecorator(queryColumnData_link[i].lb_for, {
                                 rules: [{
                                     required: false
                                 }]
                             })(
 
-                            <Select placeholder={queryColumnData[i].placeholder} >
-                                {queryColumnData[i].options.map((el, i)=>(
-                                    <Option value={el.value} key={i}>{el.text}</Option>
-                                ))}
-                            </Select>
+                                <Select placeholder={queryColumnData_link[i].placeholder} >
+                                    {queryColumnData_link[i].options.map((el, i)=>(
+                                        <Option value={el.value} key={i}>{el.text}</Option>
+                                    ))}
+                                </Select>
                             )}
                         </FormItem>
                     </Col>
 
                 );
             }else{
-            children.push(
-                <Col span={8} key={i}>
-                    <FormItem {...formItemLayout} label={queryColumnData[i].col_name}>
-                        {getFieldDecorator(queryColumnData[i].lb_for)(
-                            <Input placeholder={queryColumnData[i].placeholder} />
-                        )}
-                    </FormItem>
-                </Col>
-            );}
+                children.push(
+                    <Col span={8} key={i}>
+                        <FormItem {...formItemLayout} label={queryColumnData_link[i].col_name}>
+                            {getFieldDecorator(queryColumnData_link[i].lb_for)(
+                                <Input placeholder={queryColumnData_link[i].placeholder} />
+                            )}
+                        </FormItem>
+                    </Col>
+                );}
         }
         return children;
     }
@@ -90,7 +90,7 @@ class AdvancedSearchForm extends React.Component {
 }
 
 var UserQ = Form.create()(AdvancedSearchForm);
-class UserQuery extends React.Component{
+class LinkQuery extends React.Component{
     constructor(props){
         super(props);
         this.state = {
@@ -113,11 +113,11 @@ class UserQuery extends React.Component{
             console.error(err)
         })
         if(selectedChkbx.length == 1 && selectedChkbx[0]>=0){
-            window.location.href="/#/usr-add?id=1";
+            window.location.href="/#/link-add?id=1";
         }else{
             DialogModal.warning({
                 title: "警告",
-                content: "每次只能选择一个用户进行信息变更"
+                content: "每次只能变更一条记录"
             });
         }
 
@@ -129,10 +129,10 @@ class UserQuery extends React.Component{
                 <Button
                     type="primary"
                     size="large"
-                    onClick={function(){window.location.href="/#/usr-add"}}
+                    onClick={function(){window.location.href="/#/link-add"}}
                     style={{margin: "30px 20px"}}
                 >
-                    新增用户
+                    新增链接
                 </Button>
                 <Button
                     type="primary"
@@ -140,19 +140,19 @@ class UserQuery extends React.Component{
                     onClick={this.updUser}
                     style={{margin: "30px 20px"}}
                 >
-                    修改用户
+                    修改链接
                 </Button>
-                <div className="search-result-list">
-                    <UserQueryRes
+                {<div className="search-result-list">
+                    <LinkQueryRes
                         checkboxSel={this.checkboxSel}
                     />
-                </div>
+                </div>}
             </div>
         )
     }
 }
 
-export default UserQuery;
+export default LinkQuery;
 
 
 

@@ -13,25 +13,31 @@ const fnDel = (ev)=>{
     return;
     DialogModal.confirm({
         title: "删除用户",
-        content: "是否确认删除该用户",
+        content: "是否确认删除该链接",
         func: function(){
             DialogModal.success({
                 title: "用户",
-                content: "该用户已被删除"
+                content: "该链接已被删除"
             })
         }
     })
 }
 
 const columns = [{
-    title: '用户名',
-    dataIndex: 'username',
+    title: '链接名称',
+    dataIndex: 'name',
 }, {
-    title: '性别',
-    dataIndex: 'gender',
+    title: '链接地址',
+    dataIndex: 'link',
 }, {
-    title: '昵称',
-    dataIndex: 'nickname',
+    title: '所属类别',
+    dataIndex: 'category',
+}, {
+    title: '相关联icon',
+    dataIndex: 'link_icon_url',
+    render: (text, record) => (
+        <img width="27px" src={record.link_icon_url} />
+    ),
 }, {
     title: '操作',
     dataIndex: 'delete',
@@ -69,22 +75,15 @@ class UserQueryRes extends React.Component {
 
     componentWillMount(){
         var th = this;
-        axios.get("userQuery.json")
+        axios.get("linkQuery.json")
             .then(function(data1){
-                console.log(data1);
+                console.log(data1.data);
                 data1 = typeof(data1.data)=="object"? data1.data: JSON.parse(data1.data);
-
+                dataarr = data1;
                 for(let i=0; i<data1.length; i++){
                     data1[i].key = i;
-                    if(data1[i].gender == "1"){
-                        data1[i].gender = "男";
-                    }else if(data1[i].gender == "2"){
-                        data1[i].gender = "女";
-                    }else{
-                        data1[i].gender = "性别不明？伪娘：女汉子";
-                    }
                 }
-                dataarr = data1;
+
                 th.setState({
                     selectedRowKeys: [],
                     loading: false,

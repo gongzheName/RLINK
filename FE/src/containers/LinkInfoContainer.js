@@ -5,7 +5,7 @@
 
 import {connect} from "react-redux";
 
-import AddInfo from "../components/AdminOperation/LinkBusiness/AddInfo";
+import AddInfo from "../components/AdminOperation/link/LinkAdd";
 
 import {
     addLink

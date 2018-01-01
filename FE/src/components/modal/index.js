@@ -5,7 +5,7 @@ import { Modal, Button } from 'antd';
 const DialogModal = {
     info: function(msg) {
         Modal.info({
-            title: msg.title,
+            title: "信息",
             content: (
                 <div>
                     <p>{msg.content}</p>
@@ -18,7 +18,7 @@ const DialogModal = {
     },
     success: function(msg) {
         Modal.success({
-            title: msg.title,
+            title: "成功",
             content: (
                 <div>
                     <p>{msg.content}</p>
@@ -29,9 +29,9 @@ const DialogModal = {
             },
         });
     },
-    error: function() {
+    error: function(msg) {
         Modal.error({
-            title: msg.title,
+            title: "错误",
             content: (
                 <div>
                     <p>{msg.content}</p>
@@ -42,9 +42,9 @@ const DialogModal = {
             },
         });
     },
-    warning: function() {
+    warning: function(msg) {
         Modal.warning({
-            title: msg.title,
+            title: "警告",
             content: (
                 <div>
                     <p>{msg.content}</p>
@@ -57,7 +57,7 @@ const DialogModal = {
     },
     confirm: function(msg) {
         Modal.confirm({
-            title: msg.title,
+            title: "询问",
             content: (
                 <div>
                     <p>{msg.content}</p>

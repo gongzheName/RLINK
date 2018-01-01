@@ -1,0 +1,19 @@
+[{
+  "name": "腾讯网",
+  "link": "http://www.qq.com",
+  "category": "1_新闻资讯",
+  "link_icon_url": "http://mat1.gtimg.com/www/icon/favicon2.ico",
+  "id": "1"
+},{
+  "name": "阿里巴巴",
+  "link": "http://www.taobao.com",
+  "category": "2_在线购物",
+  "link_icon_url": "https://img.alicdn.com/tps/i3/T1OjaVFl4dXXa.JOZB-114-114.png",
+  "id": "2"
+},{
+  "name": "百度",
+  "link": "http://www.baidu.com",
+  "category": "3_搜索查询",
+  "link_icon_url": "https://www.baidu.com/favicon.ico",
+  "id": "3"
+}]

@@ -5,7 +5,7 @@
 
 import {connect} from "react-redux";
 
-import DelInfo from "../components/AdminOperation/LinkBusiness/DelInfo";
+import DelInfo from "../components/AdminOperation/link/LinkUpdate";
 
 import {
     addLink,

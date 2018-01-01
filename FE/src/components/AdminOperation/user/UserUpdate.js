@@ -4,53 +4,48 @@ import {
     Input,
     Tooltip,
     Icon,
+    Cascader,
     Select,
+    Row,
+    Col,
+    Checkbox,
     Button,
+    AutoComplete,
     Upload,
     Radio,
     DatePicker
 } from 'antd';
-import moment from "moment";
 import axios from "axios";
 import DialogModal from "../../modal/index";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const AutoCompleteOption = AutoComplete.Option;
 const RadioGroup = Radio.Group;
 
 class RegistrationForm extends React.Component{
     constructor(props){
         super(props);
-        let data = this.props.location.search;
-        let isUpdate = false;
-        data = parseInt(data.substr(1,).split("=")[1]);
-
-        if(data>0 && ((data | 0)===data)){
-            console.log(data);
-            isUpdate = true;
-            let th = this;
-            axios.get("userUpdate.json", "").then(function(data){
-                console.log(data.data);
-                let d = data.data;
-                th.props.form.setFieldsValue({
-                    birth: moment(d.birth, "YYYY-MM-DD"),
-                    email: d.email,
-                    gender: d.gender,
-                    username: d.username,
-                    nickname: d.nickname,
-                    introduce: d.introduce,
-                    phone: d.phone
-
-
-                });
-            })
-        }
-
         this.state = {
             confirmDirty: false,
             autoCompleteResult: [],
-            isUpdate
         };
+        let th = this;
+        axios.get("userUpdate.json", "").then(function(data){
+            console.log(data.data);
+            let d = data.data;
+            th.props.form.setFieldsValue({
+                birth: moment(d.birth, "YYYY-MM-DD"),
+                email: d.email,
+                gender: d.gender,
+                username: d.username,
+                nickname: d.nickname,
+                introduce: d.introduce,
+                phone: d.phone
+
+
+            });
+        })
     }
     normFile = (e) => {
         console.log('Upload event:', e);
@@ -69,10 +64,11 @@ class RegistrationForm extends React.Component{
                 }
 
                 // Should format date value before submit.
-                const values = {
+                /*const values = {
                     ...fieldsValue,
-                    'birth': fieldsValue['birth'].format('YYYY-MM-DD')
-                };
+                    'date-picker': fieldsValue['date-picker'] && fieldsValue['date-picker'].format('YYYY-MM-DD'),
+                };*/
+
                 console.log('Received values of form: ', values);
                 axios.get("../../../src/server/userAdd.json", values)
                     .then(function(data){
@@ -91,6 +87,32 @@ class RegistrationForm extends React.Component{
                     }).catch(function(err){
                     console.error(err);
                 })
+                /*var instance = axios.create({
+                    baseURL: 'http://localhost:80/rl/',
+                    method: "post",
+                    headers: {'X-Requested-With': 'XMLHttpRequest'},
+                    params: {
+                        action: "user:userAdd"
+                    },
+                    data: JSON.stringify(values),
+                    withCredentials: true, // 默认的
+                    auth: {
+                        username: 'dev',
+                        password: 'devpwd'
+                    },
+                    proxy: {
+                        host: 'http://localhost',
+                        port: 80,
+                        auth: {
+                            username: 'dev',
+                            password: 'devpwd'
+                        }
+                    }
+                })
+                instance.post("/index", JSON.stringify(values))
+                    .then(function(data){
+                        console.log(data)
+                    })*/
             });
         });
     }
@@ -112,6 +134,16 @@ class RegistrationForm extends React.Component{
             form.validateFields(['confirm'], { force: true });
         }
         callback();
+    }
+
+    handleWebsiteChange = (value) => {
+        let autoCompleteResult;
+        if (!value) {
+            autoCompleteResult = [];
+        } else {
+            autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
+        }
+        this.setState({ autoCompleteResult });
     }
 
     render() {
@@ -140,6 +172,18 @@ class RegistrationForm extends React.Component{
                 },
             },
         };
+        const prefixSelector = getFieldDecorator('prefix', {
+            initialValue: '86',
+        })(
+            <Select style={{ width: 70 }}>
+                <Option value="86">+86</Option>
+                <Option value="87">+87</Option>
+            </Select>
+        );
+
+        const websiteOptions = autoCompleteResult.map(website => (
+            <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
+        ));
 
         const config = {
             rules: [{ type: 'object', required: false, message: 'Please select time!' }],
@@ -164,9 +208,8 @@ class RegistrationForm extends React.Component{
                 <FormItem
                     {...formItemLayout}
                     label="密码"
-                    style={{display: this.state.isUpdate?"none":"block"}}
                 >
-                    {this.state.isUpdate?null:getFieldDecorator('password', {
+                    {getFieldDecorator('password', {
                         rules: [{
                             required: true, message: '请输入密码!',
                         }, {
@@ -179,9 +222,8 @@ class RegistrationForm extends React.Component{
                 <FormItem
                     {...formItemLayout}
                     label="确认密码"
-                    style={{display: this.state.isUpdate?"none":"block"}}
                 >
-                    {this.state.isUpdate?null:getFieldDecorator('confirm', {
+                    {getFieldDecorator('confirm', {
                         rules: [{
                             required: true, message: '请再次输入密码!',
                         }, {
@@ -223,10 +265,8 @@ class RegistrationForm extends React.Component{
                     {...formItemLayout}
                     label="出生日期"
                 >
-                    {getFieldDecorator('birth', config)(
-                        <DatePicker
-                            format="YYYY-MM-DD"
-                        />
+                    {getFieldDecorator('date-picker', config)(
+                        <DatePicker />
                     )}
                 </FormItem>
 
@@ -270,7 +310,7 @@ class RegistrationForm extends React.Component{
                     {getFieldDecorator('phone', {
                         rules: [{ required: false, message: 'Please input your phone number!' }],
                     })(
-                        <Input style={{ width: '100%' }} />
+                        <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
                     )}
                 </FormItem>
 
@@ -278,9 +318,8 @@ class RegistrationForm extends React.Component{
                     {...formItemLayout}
                     label="头像"
                     extra="图片大小限定在200KB以下"
-                    style={{display: this.state.isUpdate?"none":"block"}}
                 >
-                    {this.state.isUpdate?null:getFieldDecorator('avatar', {
+                    {getFieldDecorator('avatar', {
                         valuePropName: 'fileList',
                         getValueFromEvent: this.normFile,
                     })(
@@ -300,6 +339,6 @@ class RegistrationForm extends React.Component{
     }
 }
 
-const UserAdd = Form.create()(RegistrationForm);
+const UserUpdate = Form.create()(RegistrationForm);
 
-export default UserAdd;
+export default UserUpdate;

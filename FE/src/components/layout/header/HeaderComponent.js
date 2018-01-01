@@ -49,14 +49,12 @@ const RouterNavs = (arr)=>(
         }else{
             return(<Menu.Item key={i}><Link to={el.path}>{el.navTitle}</Link></Menu.Item>)
         }
-        //return(<Menu.Item key={i}><Link to={el.path}>{el.navTitle}</Link></Menu.Item>)
     })
 );
 
 class HeaderComponent extends React.Component {
-    constructor(props) {
-        super(props);
-        console.log(routerArrs, "constructor")
+    constructor(props){
+        super(props)
     }
 
     componentWillMount() {
