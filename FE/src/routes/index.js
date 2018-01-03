@@ -3,6 +3,7 @@ import Nav1 from "../components/layout/content/Nav1";
 import ManagerOperation from "../components/layout/content/ManagerOperation";
 import Nav3 from "../components/layout/content/Nav3";
 import Nav4 from "../components/layout/content/Nav4";
+import LinkList from "../components/layout/content/LinkList";
 
 let routerArrs = [
     {
@@ -12,7 +13,7 @@ let routerArrs = [
         navTitle: "首页"
     },{
         path:'/nav1',
-        component:Nav1,
+        component:LinkList,
         dropdown: false,
         navTitle: "预留板块1"
     },
