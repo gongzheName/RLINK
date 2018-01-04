@@ -20,7 +20,6 @@ import LinkQuery from "./AdminOperation/link/LinkQuery";
 
 //import LinkAdd from "./AdminOperation/link/LinkAdd";
 import CtgrQuery from "./AdminOperation/ctgr/CtgrQuery";
-CtgrQuery
 
 const LinkRouters = (routerArr) => {
     return routerArr.map( (e,i) => {

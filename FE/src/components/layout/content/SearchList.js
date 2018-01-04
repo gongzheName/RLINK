@@ -43,9 +43,38 @@ let list = ()=>{
 class SearchList extends React.Component {
 	constructor(props){
 		super(props);
+		console.log(this.props, 456);
 		this.test = this.test.bind(this);
-		console.log(window.decodeURIComponent(window.location.hash.split("?")[1].split("=")[1]));
+		//console.log(window.decodeURIComponent(window.location.hash.split("?")[1].split("=")[1]));
 	}
+    componentWillMount() {
+		console.log("componentWillMount")
+    }
+
+    componentDidMount() {
+        console.log("componentDidMount")
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log("componentWillReceiveProps")
+    }
+
+    shouldComponentUpdate() {
+        console.log("shouldComponentUpdate")
+        return true;        // 记得要返回true
+    }
+
+    componentWillUpdate() {
+        console.log("componentWillUpdate")
+    }
+
+    componentDidUpdate() {
+        console.log("componentDidUpdate")
+    }
+
+    componentWillUnmount() {
+        console.log("componentWillUnmount")
+    }
 	test(){
 		//alert(12345678);
 	}
