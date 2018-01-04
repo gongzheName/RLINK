@@ -1,5 +1,6 @@
 import React from "react";
 import { Table, Button } from 'antd';
+import qs from "qs";
 import axios from "../../../request/index";
 
 import DialogModal from "../../modal/index";
@@ -69,7 +70,12 @@ class UserQueryRes extends React.Component {
 
     componentWillMount(){
         var th = this;
-        axios.get("userQuery.json")
+        axios.post("http://101.236.40.233/", qs.stringify({"key_test":"value_test"})).then(function(data){
+        	console.log(data.data);
+        }).catch(function(err){
+        	console.error(err)
+        })
+        axios.get("/userQuery.json")
             .then(function(data1){
                 console.log(data1);
                 data1 = typeof(data1.data)=="object"? data1.data: JSON.parse(data1.data);

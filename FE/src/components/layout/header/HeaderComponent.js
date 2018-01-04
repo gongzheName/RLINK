@@ -1,5 +1,5 @@
 import React from "react";
-import {Layout, Menu, Icon, Dropdown} from "antd";
+import {Layout, Menu, Icon, Dropdown, Input, Button} from "antd";
 
 import {
     BrowserRouter as Router,
@@ -11,8 +11,11 @@ import routerArrs from "../../../routes/index";
 
 import Nav1 from "../content/Nav1"
 
+import "./index.less";
+
 const {SubMenu} = Menu;
 const {Header, Content, Footer, Sider} = Layout;
+const Search = Input.Search;
 
 const menu = (
     <Menu>
@@ -46,7 +49,7 @@ const RouterNavs = (arr)=>(
                     </Dropdown>
                 </Menu.Item>
             )
-        }else{
+        }else if(!el.dropdown){
             return(<Menu.Item key={i}><Link to={el.path}>{el.navTitle}</Link></Menu.Item>)
         }
     })
@@ -93,6 +96,21 @@ class HeaderComponent extends React.Component {
                         {RouterNavs(routerArrs)}
 
                     </Menu>
+                    <Button
+                        type="default"
+                        size="large"
+                        ghost
+                        onClick={function(){window.location.href="/#/usr-add"}}
+                        style={{margin: "0px 20px",position:"absolute",right:"50px",top:"16px"}}
+                      >
+                        登录
+                      </Button>
+                      <Search
+                        placeholder="链接名称"
+                        style={{ width: 200,position:"absolute",right:200,top:0}}
+                        className="search-wrap"
+                        onSearch={value => {window.location.href="/#/search?wd="+value}}
+                      />
                 </Header>
             </Layout>
         )

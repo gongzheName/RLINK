@@ -39,7 +39,7 @@ let routerArrs = [
             navTitle: "用户管理"
         }],
         navTitle: "管理员操作"
-    },
+    }/*,
     {
         path:'/nav3',
         component:Nav3,
@@ -51,7 +51,7 @@ let routerArrs = [
         component:Nav4,
         dropdown: false,
         navTitle: "预留板块3"
-    }
+    }*/
 ]
 
 export default routerArrs;
