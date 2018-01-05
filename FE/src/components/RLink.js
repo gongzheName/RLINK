@@ -10,6 +10,7 @@ import routerArrs from "../routes/index";
 
 import Nav1 from "./layout/content/Nav1";
 import Home from "./layout/content/Home";
+import Login from "./layout/header/Login";
 import SearchList from "./layout/content/SearchList";
 import UserAdd from "./AdminOperation/user/UserAdd";
 import UserQuery from "./AdminOperation/user/UserQuery";
@@ -48,6 +49,7 @@ class RLink extends React.Component{
                     <Route path="/ctgr-mng" component={CtgrQuery} />
                     <Route path="/icon-mng" component={Nav1} />
                     <Route path="/search" component={SearchList} />
+                    <Route path="/login" component={Login} />
 
                 </div>
             </HashRouter>

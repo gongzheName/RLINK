@@ -11,12 +11,12 @@ let routerArrs = [
         component:HeaderComponent,
         dropdown: false,
         navTitle: "首页"
-    },{
+    },/*{
         path:'/nav1',
         component:LinkList,
         dropdown: false,
         navTitle: "预留板块1"
-    },
+    },*/
     {
         path:'/mng-oprt',
         component:ManagerOperation,

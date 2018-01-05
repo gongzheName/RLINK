@@ -83,7 +83,7 @@ class HeaderComponent extends React.Component {
     }
     render(){
         return(
-            <Layout className="layout">
+            <Layout className="layout" style={{}}>
                 <Header className="header">
                     <div className="logo" />
 
@@ -100,7 +100,7 @@ class HeaderComponent extends React.Component {
                         type="default"
                         size="large"
                         ghost
-                        onClick={function(){window.location.href="/#/usr-add"}}
+                        onClick={function(){window.location.href="/#/login"}}
                         style={{margin: "0px 20px",position:"absolute",right:"50px",top:"16px"}}
                       >
                         登录
