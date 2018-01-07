@@ -5,16 +5,19 @@ import axios from "../../../request/index";
 class SearchListCtgrTag extends React.Component{
 	constructor(props){
 		super(props);
-		console.log(props);
 		this.state = {
 			wd: this.props.wd,
+            category_id: this.props.category_id,
+			total: this.props.total,
 			searchList:[]
 		}
+        this.getSearchList = this.getSearchList.bind(this);
 	}
 
-	getSearchList(){
+	getSearchList(page, pageSize){
+		console.log(page, pageSize, "pagePageSize")
 		let th = this;
-		axios.get("/link_list.json?wd="+this.state.wd).then(function(data){
+		axios.get("/link_list.json?wd="+this.state.wd+"&category_id="+th.state.category_id).then(function(data){
     		console.log(data.data);
     		th.setState({
     			searchList: data.data
@@ -23,11 +26,11 @@ class SearchListCtgrTag extends React.Component{
 	}
 
     componentWillMount() {
-    	this.getSearchList();
+    	this.getSearchList(1, 10); //首次加载
     }
 
     componentWillReceiveProps(nextProps) {
-    	this.getSearchList();
+    	this.getSearchList(1, 10); //后续更新
     }
 
 
@@ -36,7 +39,7 @@ class SearchListCtgrTag extends React.Component{
 		let th = this;
 		return(
 			<div>
-				<h2>共有 1324 条记录</h2>
+				<h2>共有 {this.state.total} 条记录</h2>
 				<ul>
 					{this.state.searchList.map((el, key)=>(
 						<div className="repo-list" key={key}>
@@ -81,8 +84,8 @@ class SearchListCtgrTag extends React.Component{
 					style={{textAlign:"center"}}
 					className="mt-2"
 					defaultCurrent={1}
-					total={50}
-					onChange={(page, pageSize)=>(this.getSearchList)}
+					total={parseInt(this.state.total)}
+					onChange={(page, pageSize)=>this.getSearchList(page, pageSize)}
 				/>
 			</div>
 		)

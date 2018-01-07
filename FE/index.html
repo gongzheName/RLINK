@@ -22,29 +22,22 @@
             color:rgba(0, 0, 0, 0.65);
             padding:0px 50px;
             font-size:12px;
+            position: fixed;
+            bottom: 0px;
         }
     </style>
     <title>链接测试</title>
 </head>
 <body>
-    <div id="app" style="margin-bottom:40px;"></div>
+    <div id="app" style="margin-bottom:100px;"></div>
     <div class="page-footer">
         艰难困苦，玉汝于成
     </div>
 </body>
-<!-- <script type="text/javascript" src="bundle.js"></script> -->
-<script src="./build/vendors.dll.js"></script>
-<script type="text/javascript" src="./build/bundle.js"></script>
+<script type="text/javascript" src="bundle.js"></script>
+<!-- <script src="./build/vendors.dll.js"></script>
+<script type="text/javascript" src="./build/bundle.js"></script> -->
 <script>
-
-    var htmlHt = document.getElementsByTagName("html")[0].clientHeight;
-    var bodyHt = document.getElementsByTagName("body")[0].clientHeight;
-    if(bodyHt<htmlHt){
-        document.getElementById("app").style.marginBottom = "100px";
-        document.getElementsByTagName("body")[0].style.height = bodyHt+"px";
-        document.querySelector(".page-footer").style.position = "absolute"
-        document.querySelector(".page-footer").style.bottom = "0px";
-    }
 
     window.onhashchange = function(){
         if(window.location.hash == "#/"){

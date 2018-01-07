@@ -48,6 +48,7 @@ class SearchList extends React.Component {
 		this.getSearchResList(wd);
     }
 	test(){
+		console.log(this)
 	}
 
 	renderTabPane(){
@@ -64,8 +65,12 @@ class SearchList extends React.Component {
       <div className="link-list">
         <Tabs tabPosition="left" onTabClick={this.test.bind(this)}>
 		  {this.state.searchResList.map((el, key)=>(
-				<TabPane tab={el.linkCtgr+"("+el.total+")"} key={key}>
-					<SearchListCtgrTag wd={this.state.wd} />
+				<TabPane tab={el.category_name+"("+el.total+")"} key={key}>
+					<SearchListCtgrTag
+						wd={this.state.wd}
+						category_id={el.category_id}
+						total={el.total}
+					/>
 				</TabPane>
 		  	))}
         </Tabs>
