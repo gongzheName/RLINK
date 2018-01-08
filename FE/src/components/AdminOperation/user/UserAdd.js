@@ -37,7 +37,7 @@ class RegistrationForm extends React.Component{
                     birth: moment(d.birth, "YYYY-MM-DD"),
                     email: d.email,
                     gender: d.gender,
-                    username: d.username,
+                    name: d.name,
                     nickname: d.nickname,
                     introduce: d.introduce,
                     phone: d.phone
@@ -79,7 +79,12 @@ class RegistrationForm extends React.Component{
                 axios.post("http://101.236.40.233/userAdd",
                     qs.stringify(values)).
                 then(function(data){
-                    console.log(data.data);
+                    DialogModal.info({
+                        content: "用户新增成功！",
+                        func: function(){
+                            window.location.href = "#/usr-mng"
+                        }
+                    })
                 }).catch(function(err){
                     console.error(err)
                 })
@@ -168,7 +173,7 @@ class RegistrationForm extends React.Component{
                     {...formItemLayout}
                     label="用户名"
                 >
-                    {getFieldDecorator('username', {
+                    {getFieldDecorator('name', {
                         rules: [ {
                             required: true, message: '请输入用户名!',
                         }],

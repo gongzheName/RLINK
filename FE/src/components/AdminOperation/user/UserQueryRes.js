@@ -26,7 +26,7 @@ const fnDel = (ev)=>{
 // 表头数据格式
 const columns = [{
     title: '用户名',
-    dataIndex: 'username',
+    dataIndex: 'name',
 }, {
     title: '性别',
     dataIndex: 'gender',
@@ -71,26 +71,15 @@ class UserQueryRes extends React.Component {
         }).catch(function(err){
         	console.error(err)
         })
-        axios.post("http://101.236.40.233/userAdd",
+        /*axios.post("http://101.236.40.233/userAdd",
             qs.stringify({name:"任帅牛逼",password:"renshuainiubi"})).
         then(function(data){
             console.log(data.data);
         }).catch(function(err){
             console.error(err)
-        })
+        })*/
     }
 
-
-    start = () => {
-        this.setState({ loading: true });
-        // ajax request after empty completing
-        setTimeout(() => {
-            this.setState({
-                selectedRowKeys: [],
-                loading: false,
-            });
-        }, 1000);
-    }
     onSelectChange = (selectedRowKeys) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         let fn = this.state.checkboxSel;
@@ -114,24 +103,40 @@ class UserQueryRes extends React.Component {
     fetch = (params = {}) => {
       let th = this;
     this.setState({ loading: true });
-    axios.get('/userQuery.json',
-      JSON.stringify({results: 10,...params})).then((data) => {
-      const pagination = { ...this.state.pagination };
-      let data1 = typeof(data.data)=="object"? data.data: JSON.parse(data.data);
+    /*axios.post("http://101.236.40.233/userSelectAll",
+        qs.stringify({
+            request_id: "99",
+            page: 1,
+            pageSize: 10
+        })).
+    then(function(data){
+         onsole.log(data.data);
+    }).catch(function(err){
+        console.error(err)
+    })*/
+    axios.post("http://101.236.40.233/userSelectAll",
+        qs.stringify({
+            request_id: "99",
+            page: 1,
+            pageSize: 10
+        })).
+    then((data) => {
+      const pagination = { ...th.state.pagination };
+      data = data.data;
 
-        for(let i=0; i<data1.length; i++){
-            data1[i].key = i;
-            if(data1[i].gender == "1"){
-                data1[i].gender = "男";
-            }else if(data1[i].gender == "2"){
-                data1[i].gender = "女";
+        for(let i=0; i<data.data.length; i++){
+            data.data[i].key = i;
+            if(data.data[i].gender == "1"){
+                data.data[i].gender = "男";
+            }else if(data.data[i].gender == "2"){
+                data.data[i].gender = "女";
             }else{
-                data1[i].gender = "性别不明？伪娘：女汉子";
+                data.data[i].gender = "性别不明？伪娘：女汉子";
             }
         }
       // Read total count from server
       // pagination.total = data.totalCount;
-      pagination.total = 200;
+      pagination.total = data.total_record;
       th.setState({
         loading: false,
         data: data.data,

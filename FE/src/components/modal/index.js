@@ -11,6 +11,7 @@ const DialogModal = {
                     <p>{msg.content}</p>
                 </div>
             ),
+            okText: '确认',
             onOk() {
                 msg.func && msg.func();
             },
@@ -24,6 +25,7 @@ const DialogModal = {
                     <p>{msg.content}</p>
                 </div>
             ),
+            okText: '确认',
             onOk() {
                 msg.func && msg.func();
             },
@@ -37,6 +39,7 @@ const DialogModal = {
                     <p>{msg.content}</p>
                 </div>
             ),
+            okText: '确认',
             onOk() {
                 msg.func && msg.func();
             },
@@ -50,6 +53,7 @@ const DialogModal = {
                     <p>{msg.content}</p>
                 </div>
             ),
+            okText: '确认',
             onOk() {
                 msg.func && msg.func();
             },
