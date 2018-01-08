@@ -50,6 +50,7 @@ class RLink extends React.Component{
                     <Route path="/icon-mng" component={Nav1} />
                     <Route path="/search" component={SearchList} />
                     <Route path="/login" component={Login} />
+                    <Route path="/register" component={UserAdd} />
 
                 </div>
             </HashRouter>

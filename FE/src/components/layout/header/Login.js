@@ -15,6 +15,11 @@ class NormalLoginForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
+        <div className="ant-row ant-form-item">
+          <div className="ant-form-item-label ant-col-xs-24 ant-col-sm-5">
+            <span style={{fontSize:"24px",color:"#108ee9"}}>登录</span>
+          </div>
+        </div>
         <FormItem>
           {getFieldDecorator('userName', {
             rules: [{ required: true, message: '请输入用户名!' }],
@@ -40,7 +45,7 @@ class NormalLoginForm extends React.Component {
           <Button type="primary" htmlType="submit" className="login-form-button">
             登录
           </Button>
-          或者 <a href="">注册!</a>
+          或者 <a href="#/register">注册!</a>
         </FormItem>
       </Form>
     );

@@ -113,7 +113,10 @@ class UserQuery extends React.Component{
             console.error(err)
         })
         if(selectedChkbx.length == 1 && selectedChkbx[0]>=0){
-            window.location.href="/#/usr-add?id=1";
+            window.location.href=
+              "\/#\/usr-add?"+
+              window.btoa("user_id=1&random="+
+                Math.random().toString().replace(".", "").substring(1,6));
         }else{
             DialogModal.warning({
                 title: "警告",
@@ -129,7 +132,7 @@ class UserQuery extends React.Component{
                 <Button
                     type="primary"
                     size="large"
-                    onClick={function(){window.location.href="/#/usr-add"}}
+                    onClick={function(){window.location.href="#/usr-add"}}
                     style={{margin: "30px 20px"}}
                 >
                     新增用户

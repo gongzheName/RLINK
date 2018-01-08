@@ -89,7 +89,7 @@ class AdvancedSearchForm extends React.Component {
     }
 }
 
-var UserQ = Form.create()(AdvancedSearchForm);
+var LinkQ = Form.create()(AdvancedSearchForm);
 class LinkQuery extends React.Component{
     constructor(props){
         super(props);
@@ -125,7 +125,7 @@ class LinkQuery extends React.Component{
     render(){
         return(
             <div>
-                <UserQ />
+                <LinkQ />
                 <Button
                     type="primary"
                     size="large"

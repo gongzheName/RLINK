@@ -5,18 +5,17 @@ import axios from "../../../request/index";
 import DialogModal from "../../modal/index";
 
 const fnDel = (ev)=>{
-    //console.log(ev.target.previousSibling.value)
     DialogModal.info({
         title: "信息",
         content: ev.target.previousSibling.value
     });
     return;
     DialogModal.confirm({
-        title: "删除用户",
+        title: "删除链接",
         content: "是否确认删除该链接",
         func: function(){
             DialogModal.success({
-                title: "用户",
+                title: "链接",
                 content: "该链接已被删除"
             })
         }
@@ -51,47 +50,23 @@ const columns = [{
 
 const data = [];
 var dataarr = [];
-for (let i = 0; i < 46; i++) {
-    data.push({
-        key: i,
-        username: `Edward King ${i}`,
-        gender: "男",
-        nickname: `London, Park Lane no. ${i}`,
-    });
-}
 
-
-
-class UserQueryRes extends React.Component {
+class LinkQueryRes extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            selectedRowKeys: [], // Check here to configure the default column
+            selectedRowKeys: [],
             loading: false,
             dataTable: [],
-            checkboxSel: props.checkboxSel
+            checkboxSel: this.props.checkboxSel,
+            pagination: {},
+            data: []
         };
     }
 
     componentWillMount(){
         var th = this;
-        axios.get("linkQuery.json")
-            .then(function(data1){
-                console.log(data1.data);
-                data1 = typeof(data1.data)=="object"? data1.data: JSON.parse(data1.data);
-                dataarr = data1;
-                for(let i=0; i<data1.length; i++){
-                    data1[i].key = i;
-                }
-
-                th.setState({
-                    selectedRowKeys: [],
-                    loading: false,
-                    dataTable:  data1
-                })
-            }).catch(function(err){
-            console.error(err);
-        })
+        th.fetch();
     }
 
 
@@ -111,6 +86,38 @@ class UserQueryRes extends React.Component {
         fn(selectedRowKeys);
         this.setState({ selectedRowKeys });
     }
+
+    handleTableChange = (pagination, filters, sorter) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        this.setState({
+          pagination: pager,
+        });
+
+        this.fetch({
+          results: pagination.pageSize,
+          page: pagination.current,
+          ...filters,
+        });
+    }
+
+    fetch = (params = {}) => {
+      let th = this;
+    this.setState({ loading: true });
+    axios.get('/linkQuery.json',
+      JSON.stringify({results: 10,...params})).then((data) => {
+      const pagination = { ...this.state.pagination };
+      
+      pagination.total = 200;
+      th.setState({
+        loading: false,
+        data: data.data,
+        pagination,
+      });
+    });
+  }
+
+
     render() {
         const { loading, selectedRowKeys } = this.state;
         const rowSelection = {
@@ -123,11 +130,15 @@ class UserQueryRes extends React.Component {
                 <Table
                     rowSelection={rowSelection}
                     columns={columns}
-                    dataSource={dataarr}
+                    dataSource={this.state.data}
+                    pagination={this.state.pagination}
+                    loading={this.state.loading}
+                    onChange={this.handleTableChange}
+                    rowKey={record => record.id}
                 />
             </div>
         );
     }
 }
 
-export default UserQueryRes;
+export default LinkQueryRes;

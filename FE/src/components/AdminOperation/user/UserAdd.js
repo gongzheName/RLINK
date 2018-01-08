@@ -12,6 +12,7 @@ import {
 } from 'antd';
 import moment from "moment";
 import axios from "axios";
+import qs from "qs";
 import DialogModal from "../../modal/index";
 
 const FormItem = Form.Item;
@@ -21,12 +22,12 @@ const RadioGroup = Radio.Group;
 class RegistrationForm extends React.Component{
     constructor(props){
         super(props);
-        let data = this.props.location.search;
+        let data = this.props.location.search; //获取base64编码
         let isUpdate = false;
-        data = parseInt(data.substr(1,).split("=")[1]);
+        data = window.atob(data.substr(1,)); //解析
+        data = parseInt(data.split("=")[1]);
 
         if(data>0 && ((data | 0)===data)){
-            console.log(data);
             isUpdate = true;
             let th = this;
             axios.get("userUpdate.json", "").then(function(data){
@@ -69,12 +70,20 @@ class RegistrationForm extends React.Component{
                 }
 
                 // Should format date value before submit.
-                const values = {
+                /*const values = {
                     ...fieldsValue,
                     'birth': fieldsValue['birth'].format('YYYY-MM-DD')
-                };
+                };*/
+                values.request_id = "99";
                 console.log('Received values of form: ', values);
-                axios.get("../../../src/server/userAdd.json", values)
+                axios.post("http://101.236.40.233/userAdd",
+                    qs.stringify(values)).
+                then(function(data){
+                    console.log(data.data);
+                }).catch(function(err){
+                    console.error(err)
+                })
+                /*axios.get("../../../src/server/userAdd.json", values)
                     .then(function(data){
                         console.log(data);
                         DialogModal.confirm({
@@ -90,7 +99,7 @@ class RegistrationForm extends React.Component{
 
                     }).catch(function(err){
                     console.error(err);
-                })
+                })*/
             });
         });
     }
@@ -148,6 +157,13 @@ class RegistrationForm extends React.Component{
         return (
             <Form onSubmit={this.handleSubmit}>
                 <div style={{height:"20px"}}></div>
+                <div className="ant-row ant-form-item">
+                    <div className="ant-form-item-label ant-col-xs-24 ant-col-sm-5">
+                        <span style={{fontSize:"24px",color:"#108ee9"}}>
+                            {this.state.isUpdate? "用户设置": "注册"}
+                        </span>
+                    </div>
+                </div>
                 <FormItem
                     {...formItemLayout}
                     label="用户名"
@@ -291,6 +307,7 @@ class RegistrationForm extends React.Component{
                         </Upload>
                     )}
                 </FormItem>
+                <img style={{width:40}} src="http://www.qq1234.org/uploads/allimg/141211/092G942H-9.jpg" alt="" />
 
                 <FormItem {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit">提交</Button>
