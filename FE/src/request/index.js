@@ -8,6 +8,8 @@ if(window.location.hostname == "127.0.0.1"){
 	axios.defaults.baseURL = 'http://localhost:8888/src/server';
 }
 
+axios.defaults.baseURL = "http://101.236.40.233/";
+
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 

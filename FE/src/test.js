@@ -47,3 +47,51 @@ const menu = (arr) => {
         })
     )
 };
+
+
+
+
+
+
+
+
+<FormItem
+    {...formItemLayout}
+    label="头像"
+    style={{display: this.state.isUpdate?"none":"block"}}
+>
+    {this.state.isUpdate?null:getFieldDecorator('avatar', {
+        rules: [{ required: true, message: '请选择头像!' }],
+    })(
+        <div>
+            <label className="label-avator-wrap" >
+                <input type="radio" name="avator" value="1" />
+                <Avatar src="http://www.qq1234.org/uploads/allimg/141211/092G942H-9.jpg" />
+            </label>
+            <label className="label-avator-wrap" >
+                <input type="radio" name="avator" value="2" />
+                <Avatar icon="user" />
+            </label>
+            <label className="label-avator-wrap" >
+                <input type="radio" name="avator" value="5" />
+                <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+            </label>
+            <label className="label-avator-wrap" >
+                <input type="radio" name="avator" value="3" />
+                <Avatar>U</Avatar>
+            </label>
+            <label className="label-avator-wrap" >
+                <input type="radio" name="avator" value="7" />
+                <Avatar style={{ backgroundColor: '#87d068'}} icon="user" />
+            </label>
+            <label className="label-avator-wrap" >
+                <input type="radio" name="avator" value="6" />
+                <Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf'}}>U</Avatar>
+            </label>
+            <label className="label-avator-wrap" >
+                <input type="radio" name="avator" value="4" />
+                <Avatar>USER</Avatar>
+            </label>
+        </div>
+    )}
+</FormItem>

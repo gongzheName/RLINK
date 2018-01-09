@@ -6,19 +6,30 @@ import axios from "../../../request/index";
 import DialogModal from "../../modal/index";
 
 const fnDel = (ev)=>{
-    DialogModal.info({
+    /*DialogModal.info({
         title: "信息",
         content: ev.target.previousSibling.value
-    });
-    return;
+    });*/
+        
     DialogModal.confirm({
         title: "删除用户",
         content: "是否确认删除该用户",
         func: function(){
-            DialogModal.success({
+            axios.post("/userDel",
+                qs.stringify({
+                  request_id: "99",
+                  user_id: ev.target.previousSibling.value
+                })).
+            then((data) => {
+              data = data.data;
+              DialogModal.success({
                 title: "用户",
-                content: "该用户已被删除"
-            })
+                content: data.resp_msg+":该用户已被删除",
+                func: function(){
+                  window.location.reload();
+                }
+              })
+            });
         }
     })
 }
@@ -60,7 +71,7 @@ class UserQueryRes extends React.Component {
     componentWillMount(){
         var th = this;
         th.fetch();
-        axios.post("http://101.236.40.233/userSelectAll",
+        axios.post("/userSelectAll",
                 qs.stringify({
                     request_id: "99",
                     page: 1,
@@ -103,18 +114,7 @@ class UserQueryRes extends React.Component {
     fetch = (params = {}) => {
       let th = this;
     this.setState({ loading: true });
-    /*axios.post("http://101.236.40.233/userSelectAll",
-        qs.stringify({
-            request_id: "99",
-            page: 1,
-            pageSize: 10
-        })).
-    then(function(data){
-         onsole.log(data.data);
-    }).catch(function(err){
-        console.error(err)
-    })*/
-    axios.post("http://101.236.40.233/userSelectAll",
+    axios.post("/userSelectAll",
         qs.stringify({
             request_id: "99",
             page: 1,

@@ -8,10 +8,11 @@ import {
     Button,
     Upload,
     Radio,
-    DatePicker
+    DatePicker,
+    Avatar
 } from 'antd';
 import moment from "moment";
-import axios from "axios";
+import axios from "../../../request/index";
 import qs from "qs";
 import DialogModal from "../../modal/index";
 
@@ -22,19 +23,24 @@ const RadioGroup = Radio.Group;
 class RegistrationForm extends React.Component{
     constructor(props){
         super(props);
-        let data = this.props.location.search; //获取base64编码
+        let user_id = this.props.location.search; //获取base64编码
         let isUpdate = false;
-        data = window.atob(data.substr(1,)); //解析
-        data = parseInt(data.split("=")[1]);
+        user_id = window.atob(user_id.substr(1,)); //解析
+        user_id = parseInt(user_id.split("=")[1]);
 
-        if(data>0 && ((data | 0)===data)){
+        if(user_id>0 && ((user_id | 0)===user_id)){
             isUpdate = true;
             let th = this;
-            axios.get("userUpdate.json", "").then(function(data){
-                console.log(data.data);
-                let d = data.data;
+            console.log(user_id)
+
+            axios.post("/getUserById",
+                qs.stringify({
+                  request_id: "99",
+                  user_id
+                })).then(function(data){
+                let d = data.data.data[0];
                 th.props.form.setFieldsValue({
-                    birth: moment(d.birth, "YYYY-MM-DD"),
+                    birth: d.birth? moment(d.birth, "YYYY-MM-DD"): null,
                     email: d.email,
                     gender: d.gender,
                     name: d.name,
@@ -76,7 +82,7 @@ class RegistrationForm extends React.Component{
                 };*/
                 values.request_id = "99";
                 console.log('Received values of form: ', values);
-                axios.post("http://101.236.40.233/userAdd",
+                axios.post("/userAdd",
                     qs.stringify(values)).
                 then(function(data){
                     DialogModal.info({
@@ -256,7 +262,7 @@ class RegistrationForm extends React.Component{
                     label={(
                         <span>
               昵称&nbsp;
-                            <Tooltip title="什么鬼?">
+                            <Tooltip title="">
                 <Icon type="question-circle-o" />
               </Tooltip>
             </span>
@@ -264,7 +270,7 @@ class RegistrationForm extends React.Component{
                 >
                     {getFieldDecorator('nickname', {
                         rules: [ {
-                            required: false, message: '',
+                            required: true, message: '请填写昵称',
                         }],
                     })(
                         <Input />
@@ -295,27 +301,8 @@ class RegistrationForm extends React.Component{
                     )}
                 </FormItem>
 
-                <FormItem
-                    {...formItemLayout}
-                    label="头像"
-                    extra="图片大小限定在200KB以下"
-                    style={{display: this.state.isUpdate?"none":"block"}}
-                >
-                    {this.state.isUpdate?null:getFieldDecorator('avatar', {
-                        valuePropName: 'fileList',
-                        getValueFromEvent: this.normFile,
-                    })(
-                        <Upload name="avatar" action="/upload.do" listType="picture">
-                            <Button>
-                                <Icon type="upload" /> 点击上传图片
-                            </Button>
-                        </Upload>
-                    )}
-                </FormItem>
-                <img style={{width:40}} src="http://www.qq1234.org/uploads/allimg/141211/092G942H-9.jpg" alt="" />
-
                 <FormItem {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">提交</Button>
+                    <Button type="primary" htmlType="submit">{this.state.isUpdate? "提交": "注册"}</Button>
                 </FormItem>
             </Form>
         );

@@ -2,7 +2,7 @@ import React from "react";
 
 import DialogModal from "../../modal/index";
 import { Form, Row, Col, Input, Button, Icon, Select } from 'antd';
-import axios from "axios";
+import axios from "../../../request/index";
 import "./index.less";
 import queryColumnData from "./queryColumnData";
 import UserQueryRes from "./UserQueryRes";
@@ -81,7 +81,7 @@ class AdvancedSearchForm extends React.Component {
                 <Row gutter={40}>{this.getFields()}</Row>
                 <Row>
                     <Col span={24} style={{ textAlign: 'right' }}>
-                        <Button type="primary" htmlType="submit">Search</Button>
+                        <Button type="primary" htmlType="submit">查询</Button>
                     </Col>
                 </Row>
             </Form>
@@ -106,16 +106,10 @@ class UserQuery extends React.Component{
     }
     updUser(){
         const selectedChkbx = this.state.selectedChkbx;
-        axios.get("../../../src/server/userAdd.json", "").then(function(data){
-            console.log(typeof data.data)
-
-        }).catch(function(err){
-            console.error(err)
-        })
         if(selectedChkbx.length == 1 && selectedChkbx[0]>=0){
             window.location.href=
               "\/#\/usr-add?"+
-              window.btoa("user_id=1&random="+
+              window.btoa("user_id="+selectedChkbx[0]+"&random="+
                 Math.random().toString().replace(".", "").substring(1,6));
         }else{
             DialogModal.warning({
