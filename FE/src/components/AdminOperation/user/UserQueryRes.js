@@ -10,7 +10,8 @@ const fnDel = (ev)=>{
         title: "信息",
         content: ev.target.previousSibling.value
     });*/
-        
+    var user_id = ev.target.previousSibling.value; //ev.target同一组件中只能使用一次
+    console.log(ev.target)
     DialogModal.confirm({
         title: "删除用户",
         content: "是否确认删除该用户",
@@ -18,7 +19,7 @@ const fnDel = (ev)=>{
             axios.post("/userDel",
                 qs.stringify({
                   request_id: "99",
-                  user_id: ev.target.previousSibling.value
+                  user_id
                 })).
             then((data) => {
               data = data.data;
@@ -29,9 +30,21 @@ const fnDel = (ev)=>{
                   window.location.reload();
                 }
               })
+            }).
+            catch(function(err){
+                console.error(err)
             });
         }
     })
+}
+
+const updUser = (ev)=>{
+    var user_id = ev.target.previousSibling.value;
+    window.location.href=
+      "#/usr-add?"+
+      window.btoa("user_id="+user_id+"&random="+
+      Math.random().toString().replace(".", "").substring(1,6));
+
 }
 
 // 表头数据格式
@@ -50,7 +63,7 @@ const columns = [{
     render: (text, record) => (
         <span>
             <input type="hidden" value={record.id}/>
-      <a href="javascript:void(0);" onClick={fnDel}>删除</a>
+      <a href="javascript:void(0);" onClick={updUser}>修改用户信息</a>
     </span>
     ),
 }];
@@ -71,24 +84,6 @@ class UserQueryRes extends React.Component {
     componentWillMount(){
         var th = this;
         th.fetch();
-        axios.post("/userSelectAll",
-                qs.stringify({
-                    request_id: "99",
-                    page: 1,
-                    pageSize: 10
-                })).
-        then(function(data){
-        	console.log(data.data);
-        }).catch(function(err){
-        	console.error(err)
-        })
-        /*axios.post("http://101.236.40.233/userAdd",
-            qs.stringify({name:"任帅牛逼",password:"renshuainiubi"})).
-        then(function(data){
-            console.log(data.data);
-        }).catch(function(err){
-            console.error(err)
-        })*/
     }
 
     onSelectChange = (selectedRowKeys) => {
@@ -135,7 +130,7 @@ class UserQueryRes extends React.Component {
             }
         }
       // Read total count from server
-      // pagination.total = data.totalCount;
+      console.log(data);
       pagination.total = data.total_record;
       th.setState({
         loading: false,

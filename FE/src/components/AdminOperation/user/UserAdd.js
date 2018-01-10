@@ -20,6 +20,9 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
 
+const userAddUrl = "/userAdd";
+const userUpdUrl = "/userUpdate";
+
 class RegistrationForm extends React.Component{
     constructor(props){
         super(props);
@@ -31,16 +34,31 @@ class RegistrationForm extends React.Component{
         if(user_id>0 && ((user_id | 0)===user_id)){
             isUpdate = true;
             let th = this;
-            console.log(user_id)
 
             axios.post("/getUserById",
                 qs.stringify({
                   request_id: "99",
                   user_id
                 })).then(function(data){
-                let d = data.data.data[0];
+                let d = data.data.data[0]; //查询数据
+                let param1 = d.birth; //日期格式化
+                if(param1){
+                    param1 = new Date(param1);
+                    let m = param1.getMonth();
+                    if(m<9){
+                        m = "0"+(m+1);
+                    }else{
+                        m = m+1;
+                    }
+                    param1 = param1.getFullYear()+"-"+m
+                      +"-"+param1.getDate();
+                    param1 = moment(param1, "YYYY-MM-DD");
+                }else{
+                    param1 = null;
+                }
+                d.birth = param1;
                 th.props.form.setFieldsValue({
-                    birth: d.birth? moment(d.birth, "YYYY-MM-DD"): null,
+                    birth: d.birth,
                     email: d.email,
                     gender: d.gender,
                     name: d.name,
@@ -80,9 +98,16 @@ class RegistrationForm extends React.Component{
                     ...fieldsValue,
                     'birth': fieldsValue['birth'].format('YYYY-MM-DD')
                 };*/
+                if(values.birth){
+                    values = {
+                        ...fieldsValue,
+                        'birth': fieldsValue['birth'].format('YYYY-MM-DD')
+                    };
+                }
                 values.request_id = "99";
                 console.log('Received values of form: ', values);
-                axios.post("/userAdd",
+                let requestUrl = this.state.isUpdate? userUpdUrl: userAddUrl;
+                axios.post(requestUrl,
                     qs.stringify(values)).
                 then(function(data){
                     DialogModal.info({
@@ -94,23 +119,6 @@ class RegistrationForm extends React.Component{
                 }).catch(function(err){
                     console.error(err)
                 })
-                /*axios.get("../../../src/server/userAdd.json", values)
-                    .then(function(data){
-                        console.log(data);
-                        DialogModal.confirm({
-                            title: "成功",
-                            content: "是否跳转到首页",
-                            func: function(){
-                                window.location.href = "/";
-                            },
-                            funcR: function(){
-
-                            }
-                        })
-
-                    }).catch(function(err){
-                    console.error(err);
-                })*/
             });
         });
     }
@@ -260,12 +268,7 @@ class RegistrationForm extends React.Component{
                 <FormItem
                     {...formItemLayout}
                     label={(
-                        <span>
-              昵称&nbsp;
-                            <Tooltip title="">
-                <Icon type="question-circle-o" />
-              </Tooltip>
-            </span>
+                        <span>昵称</span>
                     )}
                 >
                     {getFieldDecorator('nickname', {
@@ -292,7 +295,13 @@ class RegistrationForm extends React.Component{
 
                 <FormItem
                     {...formItemLayout}
-                    label="联系方式"
+                    label={(
+                        <span>
+              联系方式&nbsp;
+                            <Tooltip title="暂时只支持11位手机号填写">
+                <Icon type="question-circle-o" />
+              </Tooltip>
+              </span>)}
                 >
                     {getFieldDecorator('phone', {
                         rules: [{ required: false, message: 'Please input your phone number!' }],

@@ -2,6 +2,7 @@ import React from "react";
 
 import DialogModal from "../../modal/index";
 import { Form, Row, Col, Input, Button, Icon, Select } from 'antd';
+import qs from "qs";
 import axios from "../../../request/index";
 import "./index.less";
 import queryColumnData from "./queryColumnData";
@@ -98,12 +99,57 @@ class UserQuery extends React.Component{
         };
         this.checkboxSel = this.checkboxSel.bind(this);
         this.updUser = this.updUser.bind(this);
+        this.delUser = this.delUser.bind(this);
     }
     checkboxSel(selectedChkbx){
         this.setState({
             selectedChkbx
         })
     }
+    
+    delUser(){
+        const user_ids = this.state.selectedChkbx;
+        if(user_ids.length >= 1){
+            DialogModal.confirm({
+        title: "删除用户",
+        content: "是否确认删除该批次用户",
+        func: function(){
+            axios.post("/userDel",
+                qs.stringify({
+                  request_id: "99",
+                  user_ids
+                })).
+            then((data) => {
+              data = data.data;
+              console.log(data)
+              if(data.resp_cd == "00"){
+                DialogModal.success({
+                  title: "用户",
+                  content: data.resp_msg+":该用户已被删除",
+                  func: function(){
+                    window.location.reload();
+                  }
+                })
+              }else{
+                DialogModal.error({
+                  title: "失败",
+                  content: "删除失败: 请稍后重试 或 询问网站管理员"
+                })
+              }
+            }).
+            catch(function(err){
+                console.error(err)
+            });
+        }
+    })
+        }else{
+            DialogModal.warning({
+                title: "警告",
+                content: "请至少选择一个用户!"
+            });
+        }
+    }
+
     updUser(){
         const selectedChkbx = this.state.selectedChkbx;
         if(selectedChkbx.length == 1 && selectedChkbx[0]>=0){
@@ -134,10 +180,10 @@ class UserQuery extends React.Component{
                 <Button
                     type="primary"
                     size="large"
-                    onClick={this.updUser}
+                    onClick={this.delUser}
                     style={{margin: "30px 20px"}}
                 >
-                    修改用户
+                    批量删除用户
                 </Button>
                 <div className="search-result-list">
                     <UserQueryRes
