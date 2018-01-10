@@ -79,4 +79,42 @@ const DialogModal = {
     }
 }
 
+function rand() {
+    return parseInt(Math.random()*100+1);
+}
+
+console.log("排序算法之快速排序---分治思想");
+function sort_quick(n) {
+    let temp, arr = [];
+    for(let i=0;i<n;i++){
+        temp = rand();
+        arr.push(temp);
+        console.log(i+"+++"+arr[i]);
+    }
+
+
+    for(let i=0;i<n;i++){
+        temp = arr[i];
+        for(let j=0;j<n;j++){
+            if(arr[j]<temp){
+                arr[i] = arr[j];
+                arr[j] = temp;
+                break;
+            }
+        }
+    }
+    console.log(arr);
+}
+
+sort_quick(10);
+
+
+
+
+
+
+
+
+
 export default DialogModal;
+
