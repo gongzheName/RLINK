@@ -47,7 +47,6 @@ class Home extends React.Component{
                       </a>
                     </div>
                 </Carousel>
-
             </div>
         )
     }
@@ -60,3 +59,52 @@ class Home extends React.Component{
 
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+
+let arr=[];
+
+function rand() {
+  return parseInt(Math.random()*100+1);
+}
+
+function randArr(n){
+  let temp;
+  for(let i=0;i<n;i++){
+    arr.push(rand());
+  }
+}
+randArr(10);
+
+console.log("排序算法之快速排序---分治思想");
+function sort_quick(arr, l, r) {
+  let i=l, j=r, temp=arr[i];
+  if(i<j){
+    while(i<j && arr[i]<temp){
+        i++;
+        console.log(arr[i])
+      }
+      arr[j]=arr[i];
+  }
+  console.log(arr)
+}
+
+sort_quick(arr, 0, 9);
+
+
+
+
+
+
+
+
