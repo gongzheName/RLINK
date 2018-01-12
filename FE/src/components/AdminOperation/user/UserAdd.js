@@ -110,12 +110,13 @@ class RegistrationForm extends React.Component{
                 axios.post(requestUrl,
                     qs.stringify(values)).
                 then(function(data){
-                    DialogModal.info({
-                        content: "用户新增成功！",
-                        func: function(){
-                            window.location.href = "#/usr-mng"
-                        }
-                    })
+                  if(data.data.resp_cd="00"){
+                    DialogModal.info(
+                      "用户新增成功！",
+                      function(){
+                        window.location.href = "#/usr-mng"
+                      })
+                  }
                 }).catch(function(err){
                     console.error(err)
                 })

@@ -5,7 +5,8 @@ import {
     Button,
     Select
 } from 'antd';
-import axios from "axios";
+import qs from "qs";
+import axios from "../../../request/index";
 import DialogModal from "../../modal/index";
 
 const FormItem = Form.Item;
@@ -13,65 +14,59 @@ const Option = Select.Option;
 
 class RegistrationForm extends React.Component{
     constructor(props){
-        super(props);
-        let data = this.props.location.search;
-        let isUpdate = false;
-        data = parseInt(data.substr(1,).split("=")[1]);
+      super(props);
+      let data = this.props.location.search;
+      let isUpdate = false;
+      data = parseInt(data.substr(1,).split("=")[1]);
 
-        if(data>0 && ((data | 0)===data)){
-            console.log(data);
-            isUpdate = true;
-            let th = this;
-            axios.get("linkUpdate.json", "").then(function(data){
-                console.log(data.data);
-                let d = data.data;
-                d.category = d.category.split("_")[0];
-                d.link_icon_url = d.link_icon_url.split("_")[0];
-                th.props.form.setFieldsValue({
-                    name: d.name,
-                    link: d.link,
-                    category_id: d.category,
-                    description: d.description,
-                    icon_id: d.link_icon_url
-                });
-            })
-        }
+      if(data>0 && ((data | 0)===data)){
+        console.log(data);
+        isUpdate = true;
+        let th = this;
+        axios.get("linkUpdate.json", "").then(function(data){
+          console.log(data.data);
+          let d = data.data;
+          d.category = d.category.split("_")[0];
+          d.link_icon_url = d.link_icon_url.split("_")[0];
+          th.props.form.setFieldsValue({
+            name: d.name,
+            link: d.link,
+            category_id: d.category,
+            description: d.description,
+            icon_id: d.link_icon_url
+          });
+        })
+      }
 
-        this.state = {
-            confirmDirty: false,
-            autoCompleteResult: [],
-            isUpdate
-        };
+      this.state = {
+        confirmDirty: false,
+        autoCompleteResult: [],
+        isUpdate
+      };
     }
     handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+      e.preventDefault();
+      this.props.form.validateFieldsAndScroll((err, values) => {
 
-            this.props.form.validateFields((err, fieldsValue) => {
-                if (err) {
-                    return;
-                }
+        this.props.form.validateFields((err, fieldsValue) => {
+          if (err) {
+            return;
+          }
 
-                console.log('Received values of form: ', values);
-                axios.get("../../../src/server/userAdd.json", values)
-                    .then(function(data){
-                        console.log(data);
-                        DialogModal.confirm({
-                            title: "成功",
-                            content: "是否跳转到首页",
-                            func: function(){
-                                window.location.href = "/";
-                            },
-                            funcR: function(){
-
-                            }
-                        })
-
-                    }).catch(function(err){
-                    console.error(err);
-                })
-            });
+          var msg_body=values;
+          var request_data={
+            msg_body: JSON.stringify(msg_body),
+            request_id:"99"
+          };
+          console.log('Received values of form: ', request_data);
+          axios.post("/linkAdd", JSON.stringify(request_data))
+          .then(function(data){
+            console.log(data);
+          }).catch(function(err){
+            console.error(err);
+          })
         });
+      });
     }
 
     render() {

@@ -12,6 +12,7 @@ import Nav1 from "./layout/content/Nav1";
 import Home from "./layout/content/Home";
 import Login from "./layout/header/Login";
 import SearchList from "./layout/content/SearchList";
+import BatchProcess from "./layout/content/BatchProcess";
 import UserAdd from "./AdminOperation/user/UserAdd";
 import UserQuery from "./AdminOperation/user/UserQuery";
 import UserUpdate from "./AdminOperation/user/UserUpdate";
@@ -51,6 +52,7 @@ class RLink extends React.Component{
                     <Route path="/search" component={SearchList} />
                     <Route path="/login" component={Login} />
                     <Route path="/register" component={UserAdd} />
+                    <Route path="/batchprocess" component={BatchProcess} />
 
                 </div>
             </HashRouter>

@@ -1,65 +1,65 @@
 import React from "react";
 
-import { Modal, Button } from 'antd';
+import { Modal } from 'antd';
 
 const DialogModal = {
-    info: function(msg) {
+    info: function(msg, func) {
         Modal.info({
             title: "信息",
             content: (
                 <div>
-                    <p>{msg.content}</p>
+                    <p>{msg}</p>
                 </div>
             ),
             okText: '确认',
             onOk() {
-                msg.func && msg.func();
+                func && func();
             },
         });
     },
-    success: function(msg) {
+    success: function(msg, func) {
         Modal.success({
             title: "成功",
             content: (
                 <div>
-                    <p>{msg.content}</p>
+                    <p>{msg}</p>
                 </div>
             ),
             okText: '确认',
             onOk() {
-                msg.func && msg.func();
+                func && func();
             },
         });
     },
-    error: function(msg) {
+    error: function(msg, func) {
         Modal.error({
             title: "错误",
             content: (
                 <div>
-                    <p>{msg.content}</p>
+                    <p>{msg}</p>
                 </div>
             ),
             okText: '确认',
             onOk() {
-                msg.func && msg.func();
+                func && func();
             },
         });
     },
-    warning: function(msg) {
+    warning: function(msg, func) {
         Modal.warning({
             title: "警告",
             content: (
                 <div>
-                    <p>{msg.content}</p>
+                    <p>{msg}</p>
                 </div>
             ),
             okText: '确认',
             onOk() {
-                msg.func && msg.func();
+                func && func();
             },
         });
     },
-    confirm: function(msg) {
+    confirm: function(msg, func, funcR) {
         Modal.confirm({
             title: "询问",
             content: (
@@ -70,10 +70,10 @@ const DialogModal = {
             okText: '确认',
             cancelText: '取消',
             onOk() {
-                msg.func && msg.func();
+                func && func();
             },
             onCancel() {
-                msg.funcR && msg.funcR();
+                funcR && funcR();
             },
         });
     }

@@ -83,7 +83,7 @@ class UserQueryRes extends React.Component {
 
     componentWillMount(){
         var th = this;
-        th.fetch();
+        th.fetch({page:1});
     }
 
     onSelectChange = (selectedRowKeys) => {
@@ -112,8 +112,8 @@ class UserQueryRes extends React.Component {
     axios.post("/userSelectAll",
         qs.stringify({
             request_id: "99",
-            page: 1,
-            pageSize: 10
+            page: params.page,
+            page_size: 10
         })).
     then((data) => {
       const pagination = { ...th.state.pagination };
@@ -126,7 +126,7 @@ class UserQueryRes extends React.Component {
             }else if(data.data[i].gender == "2"){
                 data.data[i].gender = "女";
             }else{
-                data.data[i].gender = "性别不明？伪娘：女汉子";
+                data.data[i].gender = "未知";
             }
         }
       // Read total count from server

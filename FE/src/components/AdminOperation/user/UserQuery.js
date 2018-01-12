@@ -98,7 +98,6 @@ class UserQuery extends React.Component{
             selectedChkbx: []
         };
         this.checkboxSel = this.checkboxSel.bind(this);
-        this.updUser = this.updUser.bind(this);
         this.delUser = this.delUser.bind(this);
     }
     checkboxSel(selectedChkbx){
@@ -106,65 +105,42 @@ class UserQuery extends React.Component{
             selectedChkbx
         })
     }
-    
+
     delUser(){
         const user_ids = this.state.selectedChkbx;
         if(user_ids.length >= 1){
-            DialogModal.confirm({
-        title: "删除用户",
-        content: "是否确认删除该批次用户",
-        func: function(){
-            axios.post("/userDel",
+          DialogModal.confirm(
+            "是否确认删除该批次用户",
+            function(){
+              axios.post("/userDel",
                 qs.stringify({
                   request_id: "99",
-                  user_ids
-                })).
-            then((data) => {
-              data = data.data;
-              console.log(data)
-              if(data.resp_cd == "00"){
-                DialogModal.success({
-                  title: "用户",
-                  content: data.resp_msg+":该用户已被删除",
-                  func: function(){
-                    window.location.reload();
-                  }
-                })
-              }else{
-                DialogModal.error({
-                  title: "失败",
-                  content: "删除失败: 请稍后重试 或 询问网站管理员"
-                })
-              }
-            }).
-            catch(function(err){
+                  user_ids: JSON.stringify(user_ids)
+              })).
+              then((data) => {
+                data = data.data;
+                console.log(data)
+                if(data.resp_cd == "00"){
+                  DialogModal.success(
+                    data.resp_msg+":该批次用户已被删除",
+                    function(){
+                      window.location.reload();
+                    }
+                  );
+                }else{
+                  DialogModal.error("删除失败: 请稍后重试 或 询问网站管理员");
+                }
+              }).
+              catch(function(err){
                 console.error(err)
-            });
-        }
-    })
+              });
+            }
+          );
         }else{
-            DialogModal.warning({
-                title: "警告",
-                content: "请至少选择一个用户!"
-            });
+            DialogModal.warning("请至少选择一个用户!");
         }
     }
 
-    updUser(){
-        const selectedChkbx = this.state.selectedChkbx;
-        if(selectedChkbx.length == 1 && selectedChkbx[0]>=0){
-            window.location.href=
-              "\/#\/usr-add?"+
-              window.btoa("user_id="+selectedChkbx[0]+"&random="+
-                Math.random().toString().replace(".", "").substring(1,6));
-        }else{
-            DialogModal.warning({
-                title: "警告",
-                content: "每次只能选择一个用户进行信息变更"
-            });
-        }
-
-    }
     render(){
         return(
             <div>

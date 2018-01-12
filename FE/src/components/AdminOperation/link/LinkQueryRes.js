@@ -1,5 +1,6 @@
 import React from "react";
 import { Table, Button } from 'antd';
+import qs from "qs";
 import axios from "../../../request/index";
 
 import DialogModal from "../../modal/index";
@@ -43,7 +44,7 @@ const columns = [{
     render: (text, record) => (
         <span>
             <input type="hidden" value={record.id}/>
-      <a href="javascript:void(0);" onClick={fnDel}>删除</a>
+      <a href="javascript:void(0);" onClick={fnDel}>修改链接信息</a>
     </span>
     ),
 }];
@@ -66,20 +67,10 @@ class LinkQueryRes extends React.Component {
 
     componentWillMount(){
         var th = this;
-        th.fetch();
+        th.fetch({page:1});
     }
 
 
-    start = () => {
-        this.setState({ loading: true });
-        // ajax request after empty completing
-        setTimeout(() => {
-            this.setState({
-                selectedRowKeys: [],
-                loading: false,
-            });
-        }, 1000);
-    }
     onSelectChange = (selectedRowKeys) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         let fn = this.state.checkboxSel;
@@ -101,14 +92,22 @@ class LinkQueryRes extends React.Component {
         });
     }
 
-    fetch = (params = {}) => {
-      let th = this;
+  fetch = (params = {}) => {
+    let th = this;
     this.setState({ loading: true });
-    axios.get('/linkQuery.json',
-      JSON.stringify({results: 10,...params})).then((data) => {
-      const pagination = { ...this.state.pagination };
-      
-      pagination.total = 200;
+    axios.post("/linkSelectAll",
+        qs.stringify({
+            request_id: "99",
+            page: params.page,
+            page_size: 10
+        })).
+    then((data) => {
+      const pagination = { ...th.state.pagination };
+      data = data.data;
+
+      // Read total count from server
+      console.log(data);
+      pagination.total = data.total_record;
       th.setState({
         loading: false,
         data: data.data,
