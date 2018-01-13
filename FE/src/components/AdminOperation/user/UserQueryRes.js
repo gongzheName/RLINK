@@ -5,39 +5,6 @@ import axios from "../../../request/index";
 
 import DialogModal from "../../modal/index";
 
-const fnDel = (ev)=>{
-    /*DialogModal.info({
-        title: "信息",
-        content: ev.target.previousSibling.value
-    });*/
-    var user_id = ev.target.previousSibling.value; //ev.target同一组件中只能使用一次
-    console.log(ev.target)
-    DialogModal.confirm({
-        title: "删除用户",
-        content: "是否确认删除该用户",
-        func: function(){
-            axios.post("/userDel",
-                qs.stringify({
-                  request_id: "99",
-                  user_id
-                })).
-            then((data) => {
-              data = data.data;
-              DialogModal.success({
-                title: "用户",
-                content: data.resp_msg+":该用户已被删除",
-                func: function(){
-                  window.location.reload();
-                }
-              })
-            }).
-            catch(function(err){
-                console.error(err)
-            });
-        }
-    })
-}
-
 const updUser = (ev)=>{
     var user_id = ev.target.previousSibling.value;
     window.location.href=
@@ -92,7 +59,9 @@ class UserQueryRes extends React.Component {
         fn(selectedRowKeys);
         this.setState({ selectedRowKeys });
     }
+
     handleTableChange = (pagination, filters, sorter) => {
+        console.log(pagination)
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
         this.setState({
@@ -100,6 +69,7 @@ class UserQueryRes extends React.Component {
         });
 
         this.fetch({
+
           results: pagination.pageSize,
           page: pagination.current,
           ...filters,
@@ -119,24 +89,32 @@ class UserQueryRes extends React.Component {
       const pagination = { ...th.state.pagination };
       data = data.data;
 
-        for(let i=0; i<data.data.length; i++){
-            data.data[i].key = i;
-            if(data.data[i].gender == "1"){
-                data.data[i].gender = "男";
-            }else if(data.data[i].gender == "2"){
-                data.data[i].gender = "女";
-            }else{
-                data.data[i].gender = "未知";
+        if(data.resp_cd=="00"){
+            for(let i=0; i<data.data.length; i++){
+                data.data[i].key = i;
+                if(data.data[i].gender == "1"){
+                    data.data[i].gender = "男";
+                }else if(data.data[i].gender == "2"){
+                    data.data[i].gender = "女";
+                }else{
+                    data.data[i].gender = "未知";
+                }
             }
+            // Read total count from server
+            pagination.total = data.total_record;
+            th.setState({
+                loading: false,
+                data: data.data,
+                pagination,
+            });
+        }else{
+            DialogModal.info({
+                content:data.resp_msg
+            })
         }
-      // Read total count from server
+
       console.log(data);
-      pagination.total = data.total_record;
-      th.setState({
-        loading: false,
-        data: data.data,
-        pagination,
-      });
+
     });
   }
 

@@ -116,22 +116,22 @@ class UserQuery extends React.Component{
                 qs.stringify({
                   request_id: "99",
                   user_ids: JSON.stringify(user_ids)
-              })).
-              then((data) => {
-                data = data.data;
-                console.log(data)
-                if(data.resp_cd == "00"){
-                  DialogModal.success(
+                })).
+            then((data) => {
+              data = data.data;
+              console.log(data)
+              if(data.resp_cd == "00"){
+                DialogModal.success(
                     data.resp_msg+":该批次用户已被删除",
                     function(){
-                      window.location.reload();
-                    }
-                  );
-                }else{
-                  DialogModal.error("删除失败: 请稍后重试 或 询问网站管理员");
-                }
-              }).
-              catch(function(err){
+                    window.location.reload();
+                  }
+                );
+              }else{
+                DialogModal.error("删除失败: 请稍后重试 或 询问网站管理员");
+              }
+            }).
+            catch(function(err){
                 console.error(err)
               });
             }
