@@ -12,6 +12,9 @@ import DialogModal from "../../modal/index";
 const FormItem = Form.Item;
 const Option = Select.Option;
 
+const userAddUrl = "/userAdd";
+const userUpdUrl = "/userUpdate";
+
 class RegistrationForm extends React.Component{
     constructor(props){
       super(props);
@@ -23,7 +26,7 @@ class RegistrationForm extends React.Component{
         console.log(data);
         isUpdate = true;
         let th = this;
-        axios.get("linkUpdate.json", "").then(function(data){
+        /*axios.get("linkUpdate.json", "").then(function(data){
           console.log(data.data);
           let d = data.data;
           d.category = d.category.split("_")[0];
@@ -35,7 +38,7 @@ class RegistrationForm extends React.Component{
             description: d.description,
             icon_id: d.link_icon_url
           });
-        })
+        })*/
       }
 
       this.state = {
@@ -59,7 +62,7 @@ class RegistrationForm extends React.Component{
             request_id:"99"
           };
           console.log('Received values of form: ', request_data);
-          axios.post("/linkAdd", JSON.stringify(request_data))
+          axios.post("/linkAdd", qs.stringify(request_data))
           .then(function(data){
             console.log(data);
           }).catch(function(err){

@@ -104,11 +104,14 @@ class RegistrationForm extends React.Component{
                         'birth': fieldsValue['birth'].format('YYYY-MM-DD')
                     };
                 }
-                values.request_id = "99";
-                console.log('Received values of form: ', values);
+                let msg_body=values;
+                let request_data={};//传给后台的参数
+                request_data.msg_body=JSON.stringify(msg_body);
+                request_data.request_id = "99";
+                console.log('Received values of form: ', request_data);
                 let requestUrl = this.state.isUpdate? userUpdUrl: userAddUrl;
                 axios.post(requestUrl,
-                    qs.stringify(values)).
+                    qs.stringify(request_data)).
                 then(function(data){
                   if(data.data.resp_cd="00"){
                     DialogModal.info(
