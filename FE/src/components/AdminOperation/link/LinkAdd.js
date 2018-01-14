@@ -193,3 +193,25 @@ class RegistrationForm extends React.Component{
 const LinkAdd = Form.create()(RegistrationForm);
 
 export default LinkAdd;
+
+
+
+
+/*var title;
+var xhr = new XMLHttpRequest();
+xhr.open( "get","http://localhost:8888/index.html", true);
+xhr.onreadystatechange = function(){
+    if(xhr.readyState==4 && xhr.status==200){
+        console.log(xhr.responseText);
+        //xhr.responseText;
+        console.log(xhr.responseText.match(/<title>([\s\S]*?)<\/title>/)[1])
+    }
+}
+xhr.send();*/
+
+
+
+
+
+
+
