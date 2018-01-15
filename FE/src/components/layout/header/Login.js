@@ -1,6 +1,9 @@
 import React from "react";
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import DialogModal from "../../modal/index";
 const FormItem = Form.Item;
+
+const users=[{name:"administer",password:"adminrlink"}];
 
 class NormalLoginForm extends React.Component {
   handleSubmit = (e) => {
@@ -8,6 +11,14 @@ class NormalLoginForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        if((values.userName==users[0]["name"])&&
+            (values.password==users[0]["password"])){
+            localStorage.setItem("login", "success_local");
+            localStorage.setItem("loginTimeStamp", new Date().getTime());
+            window.location.reload();
+        }else{
+            DialogModal.error("用户名或密码有误！");
+        }
       }
     });
   }
@@ -35,13 +46,13 @@ class NormalLoginForm extends React.Component {
           )}
         </FormItem>
         <FormItem>
-          {getFieldDecorator('remember', {
+          {/*{getFieldDecorator('remember', {
             valuePropName: 'checked',
             initialValue: true,
           })(
             <Checkbox>记住密码</Checkbox>
           )}
-          <a className="login-form-forgot" href="">忘记密码</a>
+          <a className="login-form-forgot" href="">忘记密码</a>*/}
           <Button type="primary" htmlType="submit" className="login-form-button">
             登录
           </Button>

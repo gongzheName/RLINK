@@ -9,13 +9,28 @@ import {
 
 import routerArrs from "../../../routes/index";
 
-import Nav1 from "../content/Nav1"
-
 import "./index.less";
 
-const {SubMenu} = Menu;
-const {Header, Content, Footer, Sider} = Layout;
+const {Header} = Layout;
 const Search = Input.Search;
+
+let login_state=false;
+let ts_login = parseInt(localStorage.getItem("loginTimeStamp"));
+let ts = new Date().getTime();
+if((ts-ts_login)/(1000*3600*24)<=30){
+    login_state=true;
+}
+
+const login = ()=>{
+    console.log(123);
+    window.location.href="#/login";
+}
+
+const logout = ()=>{
+   localStorage.removeItem("loginTimeStamp");
+   localStorage.removeItem("login");
+   window.location.reload();
+}
 
 const menu = (
     <Menu>
@@ -100,10 +115,10 @@ class HeaderComponent extends React.Component {
                         type="default"
                         size="large"
                         ghost
-                        onClick={function(){window.location.href="/#/login"}}
+                        onClick={login_state?logout:login}
                         style={{margin: "0px 20px",position:"absolute",right:"50px",top:"16px"}}
                       >
-                        登录
+                        {login_state?"注销":"登录"}
                       </Button>
                       <Search
                         placeholder="链接名称"

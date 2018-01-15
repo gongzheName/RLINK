@@ -11,6 +11,7 @@ import routerArrs from "../routes/index";
 import Nav1 from "./layout/content/Nav1";
 import Home from "./layout/content/Home";
 import Login from "./layout/header/Login";
+import ManagerOperation from "../components/layout/content/ManagerOperation";
 import SearchList from "./layout/content/SearchList";
 import BatchProcess from "./layout/content/BatchProcess";
 import UserAdd from "./AdminOperation/user/UserAdd";
@@ -20,8 +21,41 @@ import UserUpdate from "./AdminOperation/user/UserUpdate";
 import LinkAdd from "./AdminOperation/link/LinkAdd";
 import LinkQuery from "./AdminOperation/link/LinkQuery";
 
-//import LinkAdd from "./AdminOperation/link/LinkAdd";
 import CtgrQuery from "./AdminOperation/ctgr/CtgrQuery";
+
+const admin_mng = {
+    path:'/mng-oprt',
+    component:ManagerOperation,
+    dropdown: true,
+    children: [{
+        path:'/usr-mng',
+        component:Nav1,
+        navTitle: "用户管理"
+    },{
+        path:'/link-mng',
+        component:Nav1,
+        navTitle: "链接管理"
+    },{
+        path:'/ctgr-mng',
+        component:Nav1,
+        navTitle: "用户管理"
+    },{
+        path:'/icon-mng',
+        component:Nav1,
+        navTitle: "用户管理"
+    }],
+    navTitle: "管理员操作"
+};
+
+
+if(localStorage.getItem("login")=="success_local"){
+    let ts_login = parseInt(localStorage.getItem("loginTimeStamp"));
+    let ts = new Date().getTime();
+    if((ts-ts_login)/(1000*3600*24)<=30){
+        routerArrs.push(admin_mng);
+    }
+}
+
 
 const LinkRouters = (routerArr) => {
     return routerArr.map( (e,i) => {

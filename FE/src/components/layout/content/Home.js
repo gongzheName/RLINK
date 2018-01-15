@@ -3,13 +3,40 @@ import { Carousel, Popover, Button, Icon } from 'antd';
 
 const text = <span>视频集散地</span>;
 const content = (
-  <div style={{width:"100px"}}>
-    <p>Content</p>
-    <p>Content</p>
-    <a style={{float:"left"}} target="_blank" href="http://www.youku.com"><Button>优酷</Button></a>
-    <a target="_blank" href="http://www.youku.com"><Button>优酷</Button></a>
-    <a target="_blank" href="http://www.youku.com"><Button>优酷</Button></a>
-    <a target="_blank" href="http://www.youku.com"><Button>优酷</Button></a>
+  <div style={{width:"170px"}}>
+    <Button
+      style={{margin:"5px"}}
+    >
+        <a
+          style={{textDecoration:"none"}}
+          target="_blank" href="http://www.youku.com"
+        >优酷土豆</a>
+    </Button>
+      <Button
+          style={{margin:"5px"}}
+      >
+          <a
+              style={{textDecoration:"none"}}
+              target="_blank" href="http://www.youku.com"
+          >优酷</a>
+      </Button>
+      <Button
+          style={{margin:"5px"}}
+      >
+          <a
+              style={{textDecoration:"none"}}
+              target="_blank" href="http://www.youku.com"
+          >优酷</a>
+      </Button>
+      <Button
+          style={{margin:"5px"}}
+      >
+          <a
+              style={{textDecoration:"none"}}
+              target="_blank" href="http://www.youku.com"
+          >优酷</a>
+      </Button>
+
   </div>
 );
 
@@ -18,6 +45,19 @@ const urlArr=[
   "http://img.bizhi.sogou.com/images/1366x768/2015/01/06/1034179.jpg",
   "http://dl.bizhi.sogou.com/images/1366x768/2015/04/16/1147355.jpg",
   "http://dl.bizhi.sogou.com/images/1366x768/2015/01/27/1063342.jpg"
+];
+
+const linkCtgrArr=[
+    "视频",
+    "音乐",
+    "开发",
+    "图片",
+    "软件",
+    "文档",
+    "新闻",
+    "门户网站",
+    "社交",
+    "阅读",
 ];
 
 class Home extends React.Component{
@@ -46,34 +86,25 @@ class Home extends React.Component{
             }
           </Carousel>
         </div>
-        <div style={{float:"right",width:"300px",height:"300px",marginTop:"20px"}}>
+        <div style={{float:"right",width:"300px",height:"400px",marginTop:"20px"}}>
             <ul>
-                <li>视频</li>
-                <li>音乐</li>
-                <li>开发</li>
-                <li>图片</li>
-                <li>软件</li>
-                <li>文档</li>
-                <li>新闻</li>
-                <li>门户网站</li>
-                <li>阅读</li>
-                <li>社交</li>
-                <li>更多分类（下拉菜单）</li>
-                <li>
-                  <div style={{width:"300px",marginTop:"10px"}}>
-                    <Popover placement="leftTop" title={text} content={content} trigger="hover">
-                      <Button style={{width:"100%",height:"40px"}}>
-                        <Icon type="left" style={{ fontSize: 12, color: '#08c',float:"left" }} />
-                        视频
-                      </Button>
-                    </Popover>
-                  </div>
-                </li>
+                {linkCtgrArr.map((el, index)=>(
+                    <li key={index}>
+                        <div style={{width:"300px",marginTop:"10px"}}>
+                            <Popover placement="leftTop" title={text} content={content} trigger="hover">
+                                <Button style={{width:"100%",height:"40px"}}>
+                                    <Icon type="left" style={{ fontSize: 12, color: '#08c',float:"left" }} />
+                                    {el}
+                                </Button>
+                            </Popover>
+                        </div>
+                    </li>
+                ))}
             </ul>
         </div>
         <div style={{clear:"both"}}></div>
         <div style={{width:"600px",height:100,border:"1px solid cyan",float:"left"}}></div>
-        <div style={{width:"300px",height:100,border:"1px solid gold",float:"right"}}></div>
+        {/*<div style={{width:"300px",height:100,border:"1px solid gold",float:"right"}}></div>*/}
       </div>
     )
   }
