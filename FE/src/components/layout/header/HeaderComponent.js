@@ -17,7 +17,8 @@ const Search = Input.Search;
 let login_state=false;
 let ts_login = parseInt(localStorage.getItem("loginTimeStamp"));
 let ts = new Date().getTime();
-if((ts-ts_login)/(1000*3600*24)<=30){
+if((localStorage.getItem("login")=="success_admin")&&
+    ((ts-ts_login)/(1000*3600*24)<=30)){
     login_state=true;
 }
 

@@ -48,7 +48,7 @@ const admin_mng = {
 };
 
 
-if(localStorage.getItem("login")=="success_local"){
+if(localStorage.getItem("login")=="success_admin"){
     let ts_login = parseInt(localStorage.getItem("loginTimeStamp"));
     let ts = new Date().getTime();
     if((ts-ts_login)/(1000*3600*24)<=30){

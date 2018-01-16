@@ -13,7 +13,7 @@ class NormalLoginForm extends React.Component {
         console.log('Received values of form: ', values);
         if((values.userName==users[0]["name"])&&
             (values.password==users[0]["password"])){
-            localStorage.setItem("login", "success_local");
+            localStorage.setItem("login", "success_admin");
             localStorage.setItem("loginTimeStamp", new Date().getTime());
             window.location.reload();
         }else{
