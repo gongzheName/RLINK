@@ -26,17 +26,37 @@ class RegistrationForm extends React.Component {
       console.log(data);
       isUpdate = true;
       let th = this;
-      /*axios.get("linkUpdate.json", "").then(function(data){
-        console.log(data.data);
-        let d = data.data;
-        d.category = d.category.split("_")[0];
-        d.link_icon_url = d.link_icon_url.split("_")[0];
+
+      /*axios.post("/getUserById",
+        qs.stringify({
+          request_id: "99",
+          user_id
+        })).then(function(data) {
+        let d = data.data.data[0]; //查询数据
+        let param1 = d.birth; //日期格式化
+        if (param1) {
+          param1 = new Date(param1);
+          let m = param1.getMonth();
+          if (m < 9) {
+            m = "0" + (m + 1);
+          } else {
+            m = m + 1;
+          }
+          param1 = param1.getFullYear() + "-" + m +
+            "-" + param1.getDate();
+          param1 = moment(param1, "YYYY-MM-DD");
+        } else {
+          param1 = null;
+        }
+        d.birth = param1;
         th.props.form.setFieldsValue({
+          birth: d.birth,
+          email: d.email,
+          gender: d.gender,
           name: d.name,
-          link: d.link,
-          category_id: d.category,
-          description: d.description,
-          icon_id: d.link_icon_url
+          nickname: d.nickname,
+          introduce: d.introduce,
+          phone: d.phone
         });
       })*/
     }
