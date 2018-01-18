@@ -19,19 +19,19 @@ const queryColumnData_link = [{
     value: "2"
   }]
 }, {
-  col_name: "相关联图标",
-  placeholder: "--请选择--",
+  col_name: "审核状态",
+  placeholder: "--所有--",
   select: true,
-  lb_for: "icon_id",
+  lb_for: "link_check_state",
   options: [{
-    text: "--请选择--",
+    text: "--所有--",
     value: ""
   }, {
-    text: "微信",
-    value: "1"
+    text: "未审核",
+    value: "0"
   }, {
-    text: "支付宝",
-    value: "2"
+    text: "审核通过",
+    value: "1"
   }]
 }]
 

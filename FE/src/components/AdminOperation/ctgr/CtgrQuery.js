@@ -1,109 +1,60 @@
 import React from "react";
 
 import DialogModal from "../../modal/index";
-import { Form, Row, Col, Input, Button, Icon, Select } from 'antd';
-import axios from "axios";
+import { Form, Row, Col, Input, Button, Icon, Select, Modal } from 'antd';
+import axios from "../../../request/index";
 import "./index.less";
-import queryColumnData_ctgr from "./queryColumnData_ctgr";
+
 import CtgrQueryRes from "./CtgrQueryRes";
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-class AdvancedSearchForm extends React.Component {
-    state = {
-        expand: false,
-    };
 
-    handleSearch = (e) => {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            console.log('Received values of form: ', values);
-
-            axios.get("http://localhost/rl/").then(function(data){
-                console.log(data.data);
-            }).catch(function(err){
-                console.error(err)
-            })
-        });
-    }
-
-    // To generate mock Form.Item
-    getFields() {
-        const c = queryColumnData_ctgr.length;
-        const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 16 },
-        };
-        const children = [];
-        for (let i = 0; i < c; i++) {
-            if(queryColumnData_ctgr[i].select){
-                children.push(
-                    <Col span={8} key={i}>
-
-                        <FormItem {...formItemLayout} label={queryColumnData_ctgr[i].col_name}>
-                            {getFieldDecorator(queryColumnData_ctgr[i].lb_for, {
-                                rules: [{
-                                    required: false
-                                }]
-                            })(
-
-                                <Select placeholder={queryColumnData_ctgr[i].placeholder} >
-                                    {queryColumnData_ctgr[i].options.map((el, i)=>(
-                                        <Option value={el.value} key={i}>{el.text}</Option>
-                                    ))}
-                                </Select>
-                            )}
-                        </FormItem>
-                    </Col>
-
-                );
-            }else{
-                children.push(
-                    <Col span={8} key={i}>
-                        <FormItem {...formItemLayout} label={queryColumnData_ctgr[i].col_name}>
-                            {getFieldDecorator(queryColumnData_ctgr[i].lb_for)(
-                                <Input placeholder={queryColumnData_ctgr[i].placeholder} />
-                            )}
-                        </FormItem>
-                    </Col>
-                );}
-        }
-        return children;
-    }
-
-    render() {
-        return (
-            <Form
-                className="ant-advanced-search-form"
-                onSubmit={this.handleSearch}
-            >
-                <Row gutter={40}>{this.getFields()}</Row>
-                <Row>
-                    <Col span={24} style={{ textAlign: 'right' }}>
-                        <Button type="primary" htmlType="submit">Search</Button>
-                    </Col>
-                </Row>
-            </Form>
-        );
-    }
-}
-
-var UserQ = Form.create()(AdvancedSearchForm);
 class CtgrQuery extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            visible: false,
+            confirmLoading: false,
             selectedChkbx: []
         };
         this.checkboxSel = this.checkboxSel.bind(this);
         this.updUser = this.updUser.bind(this);
+        this.showModal = this.showModal.bind(this);
+        this.handleOk = this.handleOk.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+
     }
+  
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  }
+  handleOk = () => {
+    this.setState({
+      confirmLoading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        visible: false,
+        confirmLoading: false,
+      });
+    }, 2000);
+  }
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  }
+
     checkboxSel(selectedChkbx){
         this.setState({
             selectedChkbx
         })
     }
+
     updUser(){
         const selectedChkbx = this.state.selectedChkbx;
         axios.get("../../../src/server/userAdd.json", "").then(function(data){
@@ -120,19 +71,49 @@ class CtgrQuery extends React.Component{
                 content: "每次只能变更一条记录"
             });
         }
-
     }
+
     render(){
+      const formItemLayout = {
+        labelCol: {
+          xs: {
+            span: 24
+          },
+          sm: {
+            span: 5
+          },
+        },
+        wrapperCol: {
+          xs: {
+            span: 24
+          },
+          sm: {
+            span: 16
+          },
+        },
+      };
+      const { visible, confirmLoading } = this.state;
         return(
             <div>
-                <UserQ />
+              <Modal title="Title"
+                visible={visible}
+                maskClosable={false}
+                onOk={this.handleOk}
+                confirmLoading={confirmLoading}
+                onCancel={this.handleCancel}
+              >
+                <FormItem { ...formItemLayout} label = "大类名称">
+                  <Input placeholder="category_name" id="category_name" />
+                </FormItem>
+              </Modal>
+                
                 <Button
                     type="primary"
                     size="large"
-                    onClick={function(){window.location.href="/#/link-add"}}
+                    onClick={this.showModal}
                     style={{margin: "30px 20px"}}
                 >
-                    新增链接
+                    新增大类
                 </Button>
                 <Button
                     type="primary"
@@ -140,7 +121,7 @@ class CtgrQuery extends React.Component{
                     onClick={this.updUser}
                     style={{margin: "30px 20px"}}
                 >
-                    修改链接
+                    批量删除大类
                 </Button>
                 {<div className="search-result-list">
                     <CtgrQueryRes

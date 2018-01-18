@@ -23,6 +23,7 @@ import LinkQuery from "./AdminOperation/link/LinkQuery";
 
 import CtgrQuery from "./AdminOperation/ctgr/CtgrQuery";
 
+
 const admin_mng = {
     path:'/mng-oprt',
     component:ManagerOperation,
@@ -38,11 +39,7 @@ const admin_mng = {
     },{
         path:'/ctgr-mng',
         component:Nav1,
-        navTitle: "用户管理"
-    },{
-        path:'/icon-mng',
-        component:Nav1,
-        navTitle: "用户管理"
+        navTitle: "大类管理"
     }],
     navTitle: "管理员操作"
 };
@@ -82,7 +79,6 @@ class RLink extends React.Component{
                     <Route path="/link-mng" component={LinkQuery} />
                     <Route path="/link-add" component={LinkAdd} />
                     <Route path="/ctgr-mng" component={CtgrQuery} />
-                    <Route path="/icon-mng" component={Nav1} />
                     <Route path="/search" component={SearchList} />
                     <Route path="/login" component={Login} />
                     <Route path="/register" component={UserAdd} />

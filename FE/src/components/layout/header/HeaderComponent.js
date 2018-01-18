@@ -44,9 +44,6 @@ const menu = (
         <Menu.Item key="3">
             <Link to="/ctgr-mng">类别管理</Link>
         </Menu.Item>
-        <Menu.Item key="4">
-            <Link to="/icon-mng">图标管理</Link>
-        </Menu.Item>
     </Menu>
 )
 

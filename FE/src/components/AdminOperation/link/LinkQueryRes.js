@@ -8,7 +8,7 @@ import axios from "../../../request/index";
 
 import DialogModal from "../../modal/index";
 
-const updUser = (ev) => {
+const updLink = (ev) => {
   var link_id = ev.target.previousSibling.value;
   window.location.href =
     "#/link-add?" +
@@ -27,7 +27,7 @@ const columns = [{
   title: '所属类别',
   dataIndex: 'category',
 }, {
-  title: '相关联icon',
+  title: '审核状态',
   dataIndex: 'link_icon_url',
   render: (text, record) => ( <
     img width = "27px"
@@ -49,7 +49,7 @@ const columns = [{
     /> <
     a href = "javascript:void(0);"
     onClick = {
-      updUser
+      updLink
     } > 修改链接信息 < /a> <
     /span>
   ),

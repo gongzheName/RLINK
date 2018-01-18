@@ -196,48 +196,14 @@ class RegistrationForm extends React.Component {
             required: true,
             message: '必填字段!'
           }, ],
-        })( <
-          Select placeholder = "请选择一个链接大类" >
-          <
-          Option value = "1" > China < /Option> <
-          Option value = "2" > U.S.A < /Option> <
-          /Select>
+        })(
+          <Select placeholder = "请选择一个链接大类" >
+            <Option value="1">China</Option>
+            <Option value="2">U.S.A</Option>
+          </Select>
         )
-      } <
-      /FormItem> <
-      FormItem { ...formItemLayout
       }
-      label = "链接对应图标"
-      hasFeedback >
-      {
-        getFieldDecorator('icon_id', {
-          rules: [{
-            required: true,
-            message: '必填字段!'
-          }, ],
-        })( <
-          Select placeholder = "请选择一个图标" >
-          <
-          Option value = "1" >
-          China <
-          img style = {
-            {
-              display: "block",
-              width: "27px",
-              float: "left"
-            }
-          }
-          src = "/logo.png"
-
-          /
-          >
-          <
-          /Option> <
-          Option value = "2" > U.S.A < /Option> <
-          /Select>
-        )
-      } <
-      /FormItem>
+      </FormItem>
 
 
       <

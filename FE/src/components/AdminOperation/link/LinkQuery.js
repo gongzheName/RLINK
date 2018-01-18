@@ -52,46 +52,30 @@ class AdvancedSearchForm extends React.Component {
     const children = [];
     for (let i = 0; i < c; i++) {
       if (queryColumnData_link[i].select) {
-        children.push( <
-          Col span = {
-            8
-          }
-          key = {
-            i
-          } >
+        children.push(
+          <Col span={8} key={i}>
 
-          <
-          FormItem { ...formItemLayout
-          }
-          label = {
-            queryColumnData_link[i].col_name
-          } > {
-            getFieldDecorator(queryColumnData_link[i].lb_for, {
-              rules: [{
-                required: false
-              }]
-            })(
-
-              <
-              Select placeholder = {
-                queryColumnData_link[i].placeholder
-              } > {
-                queryColumnData_link[i].options.map((el, i) => ( <
-                  Option value = {
-                    el.value
+          <FormItem
+            { ...formItemLayout}
+            label={queryColumnData_link[i].col_name}
+          >
+            {
+              getFieldDecorator(queryColumnData_link[i].lb_for, {
+                rules: [{required:false}]
+              })(
+                <Select
+                  placeholder={queryColumnData_link[i].placeholder}
+                >
+                  {
+                    queryColumnData_link[i].options.map((el, i)=>(
+                      <Option value={el.value} key={i}>{el.text}</Option>
+                    ))
                   }
-                  key = {
-                    i
-                  } > {
-                    el.text
-                  } < /Option>
-                ))
-              } <
-              /Select>
-            )
-          } <
-          /FormItem> <
-          /Col>
+                </Select>
+              )
+            }
+          </FormItem>
+        </Col>
 
         );
       } else {
@@ -163,31 +147,49 @@ class LinkQuery extends React.Component {
         selectedChkbx: []
       };
       this.checkboxSel = this.checkboxSel.bind(this);
-      this.updUser = this.updUser.bind(this);
+      this.delLink = this.delLink.bind(this);
     }
     checkboxSel(selectedChkbx) {
       this.setState({
         selectedChkbx
       })
     }
-    updUser() {
-      const selectedChkbx = this.state.selectedChkbx;
-      axios.get("../../../src/server/userAdd.json", "").then(function(data) {
-        console.log(typeof data.data)
 
-      }).catch(function(err) {
-        console.error(err)
-      })
-      if (selectedChkbx.length == 1 && selectedChkbx[0] >= 0) {
-        window.location.href = "/#/link-add?id=1";
-      } else {
-        DialogModal.warning({
-          title: "警告",
-          content: "每次只能变更一条记录"
-        });
-      }
-
+    delLink() {
+    const link_ids = this.state.selectedChkbx;
+    if (link_ids.length >= 1) {
+      DialogModal.confirm(
+        "是否确认删除该批次链接",
+        function() {
+          axios.post("/linkDel",
+            qs.stringify({
+              request_id: "99",
+              link_ids: JSON.stringify(link_ids)
+            })).
+          then((data) => {
+            data = data.data;
+            console.log(data)
+            if (data.resp_cd == "00") {
+              DialogModal.success(
+                data.resp_msg + ":该批次链接已被删除",
+                function() {
+                  window.location.reload();
+                }
+              );
+            } else {
+              DialogModal.error("删除失败: 请稍后重试 或 询问网站管理员");
+            }
+          }).
+          catch(function(err) {
+            console.error(err)
+          });
+        }
+      );
+    } else {
+      DialogModal.warning("请至少选择一条链接!");
     }
+  }
+
     render() {
       return ( <
         div >
@@ -205,29 +207,21 @@ class LinkQuery extends React.Component {
           {
             margin: "30px 20px"
           }
-        } >
-        新增链接 <
-        /Button> <
-        Button type = "primary"
-        size = "large"
-        onClick = {
-          this.updUser
+        } >新增链接</Button>
+        <Button
+          type = "primary"
+          size = "large"
+          onClick = {this.delLink}
+          style = {{margin: "30px 20px"}}
+        >
+          批量删除链接
+        </Button>
+        {
+          < div className = "search-result-list" >
+            <LinkQueryRes checkboxSel={this.checkboxSel}/>
+          </div>
         }
-        style = {
-          {
-            margin: "30px 20px"
-          }
-        } >
-        批量删除链接 <
-        /Button> { < div className = "search-result-list" >
-            <
-            LinkQueryRes
-          checkboxSel = {
-            this.checkboxSel
-          }
-          /> <
-          /div>} <
-          /div>
+      </div>
         )
       }
     }

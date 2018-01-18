@@ -73,22 +73,18 @@ class AdvancedSearchForm extends React.Component {
               }]
             })(
 
-              <
-              Select placeholder = {
-                queryColumnData[i].placeholder
-              } > {
-                queryColumnData[i].options.map((el, i) => ( <
-                  Option value = {
-                    el.value
-                  }
-                  key = {
-                    i
-                  } > {
-                    el.text
-                  } < /Option>
-                ))
-              } <
-              /Select>
+              <Select
+                placeholder={queryColumnData[i].placeholder}
+              >
+                {
+                  queryColumnData[i].options.map((el, i) => (
+                    <Option
+                      value={el.value}
+                      key={i}
+                    >{el.text}</Option>
+                  ))
+                }
+              </Select>
             )
           } <
           /FormItem> <
