@@ -30,24 +30,19 @@ const columns = [{
 }, {
   title: '操作',
   dataIndex: 'delete',
-  render: (text, record) => ( <
-    span >
-    <
-    input type = "hidden"
-    value = {
-      record.id
-    }
-    /> <
-    a href = "javascript:void(0);"
-    onClick = {
-      updUser
-    } > 修改用户信息 < /a> < /
-    span >
+  render: (text, record) => (
+    <span >
+      <input type="hidden" value = {record.id}/>
+      <a
+        href="javascript:void(0);"
+        onClick={updUser}
+      >修改用户信息</a>
+    </span>
   ),
 }];
 
 class UserQueryRes extends React.Component {
-  constructor(props) {
+  constructor(props){
     super(props);
     this.state = {
       selectedRowKeys: [],
@@ -147,32 +142,18 @@ class UserQueryRes extends React.Component {
       onChange: this.onSelectChange,
     };
     const hasSelected = selectedRowKeys.length > 0;
-    return ( <
-      div >
-      <
-      Table rowSelection = {
-        rowSelection
-      }
-      columns = {
-        columns
-      }
-      dataSource = {
-        this.state.data
-      }
-      pagination = {
-        this.state.pagination
-      }
-      loading = {
-        this.state.loading
-      }
-      onChange = {
-        this.handleTableChange
-      }
-      rowKey = {
-        record => record.id
-      }
-      /> < /
-      div >
+    return (
+      <div>
+        <Table
+          rowSelection={rowSelection}
+          columns={columns}
+          dataSource={this.state.data}
+          pagination={this.state.pagination}
+          loading={this.state.loading}
+          onChange={this.handleTableChange}
+          rowKey={record => record.id}
+        />
+      </div>
     );
   }
 }

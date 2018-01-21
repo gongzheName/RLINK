@@ -64,7 +64,7 @@ const DialogModal = {
             title: "询问",
             content: (
                 <div>
-                    <p>{msg.content}</p>
+                    <p>{msg}</p>
                 </div>
             ),
             okText: '确认',

@@ -53,67 +53,42 @@ class AdvancedSearchForm extends React.Component {
     const children = [];
     for (let i = 0; i < c; i++) {
       if (queryColumnData[i].select) {
-        children.push( <
-          Col span = {
-            8
-          }
-          key = {
-            i
-          } >
+        children.push(
+          <Col span={8} key={i}>
 
-          <
-          FormItem { ...formItemLayout
-          }
-          label = {
-            queryColumnData[i].col_name
-          } > {
-            getFieldDecorator(queryColumnData[i].lb_for, {
-              rules: [{
-                required: false
-              }]
-            })(
+            <FormItem
+              { ...formItemLayout}
+              label={queryColumnData[i].col_name}
+            >
+              {getFieldDecorator(queryColumnData[i].lb_for, {
+                  rules: [{
+                    required: false
+                  }]
+                })(
 
-              <Select
-                placeholder={queryColumnData[i].placeholder}
-              >
-                {
-                  queryColumnData[i].options.map((el, i) => (
-                    <Option
-                      value={el.value}
-                      key={i}
-                    >{el.text}</Option>
-                  ))
-                }
-              </Select>
-            )
-          } <
-          /FormItem> <
-          /Col>
+                  <Select placeholder={queryColumnData[i].placeholder}>
+                    {queryColumnData[i].options.map((el, i)=>(
+                        <Option value={el.value} key={i}>{el.text}</Option>
+                    ))}
+                  </Select>
+                )
+              }
+            </FormItem>
+          </Col>
 
         );
       } else {
-        children.push( <
-          Col span = {
-            8
-          }
-          key = {
-            i
-          } >
-          <
-          FormItem { ...formItemLayout
-          }
-          label = {
-            queryColumnData[i].col_name
-          } > {
-            getFieldDecorator(queryColumnData[i].lb_for)( <
-              Input placeholder = {
-                queryColumnData[i].placeholder
-              }
-              />
-            )
-          } <
-          /FormItem> <
-          /Col>
+        children.push(
+          <Col span={8} key={i}>
+            <FormItem
+              { ...formItemLayout}
+              label={queryColumnData[i].col_name}
+            >
+              {getFieldDecorator(queryColumnData[i].lb_for)(
+                <Input placeholder={queryColumnData[i].placeholder}/>
+              )}
+            </FormItem>
+          </Col>
         );
       }
     }
@@ -121,33 +96,21 @@ class AdvancedSearchForm extends React.Component {
   }
 
   render() {
-    return ( <
-      Form className = "ant-advanced-search-form"
-      onSubmit = {
-        this.handleSearch
-      } >
-      <
-      Row gutter = {
-        40
-      } > {
-        this.getFields()
-      } < /Row> <
-      Row >
-      <
-      Col span = {
-        24
-      }
-      style = {
-        {
-          textAlign: 'right'
-        }
-      } >
-      <
-      Button type = "primary"
-      htmlType = "submit" > 查询 < /Button> <
-      /Col> <
-      /Row> <
-      /Form>
+    return (
+      <Form
+        className="ant-advanced-search-form"
+        onSubmit={this.handleSearch}
+      >
+        <Row gutter={40}>{this.getFields()}</Row>
+        <Row>
+          <Col
+            span={24}
+            style = {{textAlign: 'right'}}
+          >
+            <Button type="primary" htmlType="submit">查询</Button>
+          </Col>
+        </Row>
+      </Form>
     );
   }
 }
@@ -204,45 +167,29 @@ class UserQuery extends React.Component {
   }
 
   render() {
-    return ( <
-      div >
-      <
-      UserQ / >
-      <
-      Button type = "primary"
-      size = "large"
-      onClick = {
-        function() {
-          window.location.href = "#/usr-add"
-        }
-      }
-      style = {
-        {
-          margin: "30px 20px"
-        }
-      } >
-      新增用户 <
-      /Button> <
-      Button type = "primary"
-      size = "large"
-      onClick = {
-        this.delUser
-      }
-      style = {
-        {
-          margin: "30px 20px"
-        }
-      } >
-      批量删除用户 <
-      /Button> <
-      div className = "search-result-list" >
-      <
-      UserQueryRes checkboxSel = {
-        this.checkboxSel
-      }
-      /> <
-      /div> <
-      /div>
+    return (
+      <div>
+        <UserQ/>
+        <Button
+          type="primary"
+          size="large"
+          onClick={function(){
+            window.location.href = "#/usr-add"
+          }}
+          style={{margin: "30px 20px"}}
+        >新增用户</Button>
+
+        <Button
+          type="primary"
+          size="large"
+          onClick={this.delUser}
+          style={{margin: "30px 20px"}}
+        >批量删除用户</Button>
+
+        <div className = "search-result-list" >
+          <UserQueryRes checkboxSel={this.checkboxSel}/>
+        </div>
+      </div>
     )
   }
 }

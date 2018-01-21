@@ -1,8 +1,9 @@
 import React from "react";
 
 import DialogModal from "../../modal/index";
-import { Form, Row, Col, Input, Button, Icon, Select, Modal } from 'antd';
+import { Form, Input, Button, Select, Modal } from 'antd';
 import axios from "../../../request/index";
+import qs from "qs";
 import "./index.less";
 
 import CtgrQueryRes from "./CtgrQueryRes";
@@ -35,12 +36,32 @@ class CtgrQuery extends React.Component{
     this.setState({
       confirmLoading: true,
     });
-    setTimeout(() => {
-      this.setState({
-        visible: false,
-        confirmLoading: false,
-      });
-    }, 2000);
+    let th = this;
+
+    let requestData = {};
+    requestData.request_id="99";
+    requestData.msg_body=JSON.stringify({
+      name:document.getElementById("category_name").value
+    });
+
+    axios.post("/categoryAdd", qs.stringify(requestData))
+      .then(function(data){
+        th.setState({
+          visible: false,
+          confirmLoading: false,
+        });
+        if(data.data.resp_cd == "00"){
+          DialogModal.info(
+            "新增类别成功",
+            function() {
+              window.location.href = "#/ctgr-mng"
+            })
+        } else {
+          DialogModal.error(data.data.resp_msg);
+        }
+      }).catch(function(err) {
+        console.error(err)
+      })
   }
 
   handleCancel = () => {

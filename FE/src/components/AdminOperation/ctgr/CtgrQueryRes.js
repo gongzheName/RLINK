@@ -1,7 +1,6 @@
 import React from "react";
 import {
-  Table,
-  Button
+  Table
 } from 'antd';
 import qs from "qs";
 import axios from "../../../request/index";
@@ -111,41 +110,24 @@ class CtgrQueryRes extends React.Component {
 
 
   render() {
-    const {
-      loading,
-      selectedRowKeys
-    } = this.state;
+    const {loading,selectedRowKeys} = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
     const hasSelected = selectedRowKeys.length > 0;
-    return ( <
-      div >
-      <
-      Table rowSelection = {
-        rowSelection
-      }
-      columns = {
-        columns
-      }
-      dataSource = {
-        this.state.data
-      }
-      pagination = {
-        this.state.pagination
-      }
-      loading = {
-        this.state.loading
-      }
-      onChange = {
-        this.handleTableChange
-      }
-      rowKey = {
-        record => record.id
-      }
-      /> <
-      /div>
+    return (
+      <div>
+        <Table
+          rowSelection={rowSelection}
+          columns={columns}
+          dataSource={this.state.data}
+          pagination={this.state.pagination}
+          loading={this.state.loading}
+          onChange={this.handleTableChange}
+          rowKey={record => record.id}
+        />
+      </div>
     );
   }
 }
