@@ -20,8 +20,8 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
 
-const userAddUrl = "/userAdd";
-const userUpdUrl = "/userUpdate";
+const userAddUrl = "/admin/userAdd";
+const userUpdUrl = "/admin/userUpdate";
 
 class RegistrationForm extends React.Component {
   constructor(props) {
@@ -35,7 +35,7 @@ class RegistrationForm extends React.Component {
       isUpdate = true;
       let th = this;
 
-      axios.post("/getUserById",
+      axios.post("/admin/getUserById",
         qs.stringify({
           request_id: "99",
           user_id

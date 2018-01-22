@@ -7,31 +7,8 @@ import axios from "../../../request/index";
 
 import DialogModal from "../../modal/index";
 
-const updLink = (ev) => {
-  var link_id = ev.target.previousSibling.value;
-  window.location.href =
-    "#/link-add?" +
-    window.btoa("link_id=" + link_id + "&random=" +
-      Math.random().toString().replace(".", "").substring(1, 6));
 
-}
 
-const columns = [{
-  title: '大类ID',
-  dataIndex: 'id',
-}, {
-  title: '大类名称',
-  dataIndex: 'name',
-}, {
-  title: '预留字段1',
-  dataIndex: 'reserve_col1',
-}, {
-  title: '预留字段2',
-  dataIndex: 'reserve_col2',
-}, {
-  title: '预留字段3',
-  dataIndex: 'reserve_col3',
-}];
 
 const data = [];
 var dataarr = [];
@@ -39,14 +16,58 @@ var dataarr = [];
 class CtgrQueryRes extends React.Component {
   constructor(props) {
     super(props);
+    this.updCtgr = this.updCtgr.bind(this);
     this.state = {
       selectedRowKeys: [],
       loading: false,
       dataTable: [],
       checkboxSel: this.props.checkboxSel,
       pagination: {},
-      data: []
+      data: [],
+      columns: [{
+        title: '大类ID',
+        dataIndex: 'id',
+      }, {
+        title: '大类名称',
+        dataIndex: 'name',
+      }, {
+        title: '预留字段1',
+        dataIndex: 'reserve_col1',
+      }, {
+        title: '预留字段2',
+        dataIndex: 'reserve_col2',
+      }, {
+        title: '预留字段3',
+        dataIndex: 'reserve_col3',
+      }, {
+        title: '操作',
+        dataIndex: 'delete',
+        render: (text, record) => (
+          <span>
+            <input
+              type="hidden"
+              value={record.id}
+            />
+            <a
+              href="javascript:void(0);"
+              onClick={this.updCtgr}
+            >修改链接信息</a>
+          </span>
+        ),
+      }]
     };
+  }
+
+
+  updCtgr(ev){
+    var id = parseInt(ev.target.previousSibling.value);
+    let th = this;
+    th.state.data.map(function(el, index){
+      if(id == parseInt(el.id)){
+        console.log(id, el.name)
+        th.props.showModalUpdate(parseInt(id), el.name);
+      }
+    })
   }
 
   componentWillMount() {
@@ -86,7 +107,7 @@ class CtgrQueryRes extends React.Component {
     this.setState({
       loading: true
     });
-    axios.post("/linkSelectAll",
+    axios.post("/admin/categorySelectAll",
       qs.stringify({
         request_id: "99",
         page: params.page,
@@ -98,7 +119,6 @@ class CtgrQueryRes extends React.Component {
       data = data.data;
 
       // Read total count from server
-      console.log(data);
       pagination.total = data.total_record;
       th.setState({
         loading: false,
@@ -120,7 +140,7 @@ class CtgrQueryRes extends React.Component {
       <div>
         <Table
           rowSelection={rowSelection}
-          columns={columns}
+          columns={this.state.columns}
           dataSource={this.state.data}
           pagination={this.state.pagination}
           loading={this.state.loading}

@@ -82,7 +82,7 @@ class RegistrationForm extends React.Component {
           request_id: "99"
         };
         console.log('Received values of form: ', request_data);
-        axios.post("/linkAdd", qs.stringify(request_data))
+        axios.post("/admin/linkAdd", qs.stringify(request_data))
           .then(function(data) {
             console.log(data);
           }).catch(function(err) {

@@ -108,7 +108,7 @@ class LinkQueryRes extends React.Component {
     this.setState({
       loading: true
     });
-    axios.post("/linkSelectAll",
+    axios.post("/admin/linkSelectAll",
       qs.stringify({
         request_id: "99",
         page: params.page,

@@ -18,9 +18,15 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 class AdvancedSearchForm extends React.Component {
-  state = {
-    expand: false,
-  };
+
+  constructor(props){
+    super(props);
+    this.state = {
+      expand: false
+    };
+    console.log(props);
+  }
+
 
   handleSearch = (e) => {
     e.preventDefault();
@@ -161,7 +167,7 @@ class LinkQuery extends React.Component {
       DialogModal.confirm(
         "是否确认删除该批次链接",
         function() {
-          axios.post("/linkDel",
+          axios.post("/admin/linkDel",
             qs.stringify({
               request_id: "99",
               link_ids: JSON.stringify(link_ids)

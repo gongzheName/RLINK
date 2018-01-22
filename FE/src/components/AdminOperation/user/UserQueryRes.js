@@ -92,7 +92,7 @@ class UserQueryRes extends React.Component {
     this.setState({
       loading: true
     });
-    axios.post("/userSelectAll",
+    axios.post("/admin/userSelectAll",
       qs.stringify({
         request_id: "99",
         page: params.page,

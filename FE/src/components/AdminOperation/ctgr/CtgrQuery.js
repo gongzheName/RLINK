@@ -10,28 +10,77 @@ import CtgrQueryRes from "./CtgrQueryRes";
 const FormItem = Form.Item;
 const Option = Select.Option;
 
+const ctgrAddUrl = "/admin/categoryAdd";
+const ctgrUpdUrl = "/admin/categoryUpdate";
+
 
 class CtgrQuery extends React.Component{
     constructor(props){
-        super(props);
-        this.state = {
-            visible: false,
-            confirmLoading: false,
-            selectedChkbx: []
-        };
-        this.checkboxSel = this.checkboxSel.bind(this);
-        this.updUser = this.updUser.bind(this);
-        this.showModal = this.showModal.bind(this);
-        this.handleOk = this.handleOk.bind(this);
-        this.handleCancel = this.handleCancel.bind(this);
+      super(props);
+      this.state = {
+        visible: false,
+        confirmLoading: false,
+        selectedChkbx: []
+      };
+      this.checkboxSel = this.checkboxSel.bind(this);
+      this.showModal = this.showModal.bind(this);
+      this.showModalUpdate = this.showModalUpdate.bind(this);
+      this.delCtgr = this.delCtgr.bind(this);
+      this.handleOk = this.handleOk.bind(this);
+      this.handleCancel = this.handleCancel.bind(this);
 
     }
   
+  delCtgr() {
+    const category_ids = this.state.selectedChkbx;
+    if (category_ids.length >= 1) {
+      DialogModal.confirm(
+        "是否确认删除该批次大类",
+        function() {
+          axios.post("/admin/categoryDel",
+            qs.stringify({
+              request_id: "99",
+              category_ids: JSON.stringify(category_ids)
+            })).
+          then((data) => {
+            data = data.data;
+            console.log(data)
+            if (data.resp_cd == "00") {
+              DialogModal.success(
+                data.resp_msg + ":该批次大类已被删除",
+                function() {
+                  window.location.reload();
+                }
+              );
+            } else {
+              DialogModal.error("删除失败: 请稍后重试 或 询问网站管理员");
+            }
+          }).
+          catch(function(err) {
+            console.error(err)
+          });
+        }
+      );
+    } else {
+      DialogModal.warning("请至少选择一条大类!");
+    }
+  }
+
   showModal = () => {
     this.setState({
       visible: true,
     });
   }
+
+  showModalUpdate = (id, name) => {
+    this.setState({
+      visible: true,
+      update:true,
+      id,
+      name
+    });
+  }
+
   handleOk = () => {
     this.setState({
       confirmLoading: true,
@@ -44,7 +93,18 @@ class CtgrQuery extends React.Component{
       name:document.getElementById("category_name").value
     });
 
-    axios.post("/categoryAdd", qs.stringify(requestData))
+    let reqUrl=ctgrAddUrl;
+    let msg="新增类别成功";
+    if(this.state.update){
+      reqUrl = ctgrUpdUrl;
+      msg = "更新类别成功";
+      requestData.msg_body=JSON.stringify({
+        name:document.getElementById("category_name").value,
+        id:th.state.id
+      });
+    }
+
+    axios.post(reqUrl, qs.stringify(requestData))
       .then(function(data){
         th.setState({
           visible: false,
@@ -52,9 +112,9 @@ class CtgrQuery extends React.Component{
         });
         if(data.data.resp_cd == "00"){
           DialogModal.info(
-            "新增类别成功",
+            msg,
             function() {
-              window.location.href = "#/ctgr-mng"
+              window.location.reload();
             })
         } else {
           DialogModal.error(data.data.resp_msg);
@@ -70,29 +130,11 @@ class CtgrQuery extends React.Component{
     });
   }
 
-    checkboxSel(selectedChkbx){
-        this.setState({
-            selectedChkbx
-        })
-    }
-
-    updUser(){
-        const selectedChkbx = this.state.selectedChkbx;
-        axios.get("../../../src/server/userAdd.json", "").then(function(data){
-            console.log(typeof data.data)
-
-        }).catch(function(err){
-            console.error(err)
-        })
-        if(selectedChkbx.length == 1 && selectedChkbx[0]>=0){
-            window.location.href="/#/link-add?id=1";
-        }else{
-            DialogModal.warning({
-                title: "警告",
-                content: "每次只能变更一条记录"
-            });
-        }
-    }
+  checkboxSel(selectedChkbx){
+      this.setState({
+          selectedChkbx
+      })
+  }
 
     render(){
       const formItemLayout = {
@@ -124,7 +166,11 @@ class CtgrQuery extends React.Component{
                 onCancel={this.handleCancel}
               >
                 <FormItem { ...formItemLayout} label = "大类名称">
-                  <Input placeholder="category_name" id="category_name" />
+                  <Input
+                    defaultValue={this.state.name}
+                    placeholder="category_name"
+                    id="category_name"
+                  />
                 </FormItem>
               </Modal>
                 
@@ -139,7 +185,7 @@ class CtgrQuery extends React.Component{
                 <Button
                     type="primary"
                     size="large"
-                    onClick={this.updUser}
+                    onClick={this.delCtgr}
                     style={{margin: "30px 20px"}}
                 >
                     批量删除大类
@@ -147,6 +193,7 @@ class CtgrQuery extends React.Component{
                 {<div className="search-result-list">
                     <CtgrQueryRes
                         checkboxSel={this.checkboxSel}
+                        showModalUpdate={this.showModalUpdate}
                     />
                 </div>}
             </div>

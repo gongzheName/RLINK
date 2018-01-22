@@ -26,7 +26,8 @@ class AdvancedSearchForm extends React.Component {
   handleSearch = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log('Received values of form: ', values);
+      console.log(values);
+      console.log(JSON.stringify(values));
 
       axios.get("http://localhost/rl/").then(function(data) {
         console.log(data.data);
@@ -137,7 +138,7 @@ class UserQuery extends React.Component {
       DialogModal.confirm(
         "是否确认删除该批次用户",
         function() {
-          axios.post("/userDel",
+          axios.post("/admin/userDel",
             qs.stringify({
               request_id: "99",
               user_ids: JSON.stringify(user_ids)

@@ -51,7 +51,7 @@ class Demo extends React.Component {
           getValueFromEvent: this.normFile,
         })( <
           Upload name = "batchfile"
-          action = "http://101.236.40.233/upload.do"
+          action = "http://101.236.40.233/admin/addLinksFromFile"
           listType = "text" >
           <
           Button >
@@ -84,8 +84,8 @@ const WrappedDemo = Form.create()(Demo);
 
 class BatchProcess extends React.Component {
   render() {
-    return ( <
-      WrappedDemo / >
+    return (
+      <WrappedDemo/>
     )
   }
 }
