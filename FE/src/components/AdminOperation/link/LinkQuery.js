@@ -10,8 +10,9 @@ import {
   Icon,
   Select
 } from 'antd';
-import axios from "axios";
+import axios from "../../../request/index";
 import "./index.less";
+import qs from "qs";
 import queryColumnData_link from "./queryColumnData_link";
 import LinkQueryRes from "./LinkQueryRes";
 const FormItem = Form.Item;
@@ -22,28 +23,52 @@ class AdvancedSearchForm extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      expand: false
+      expand: false,
+      queryColumnData_link
     };
-    console.log(props);
   }
 
+  componentWillMount(){
+    let fa = this.state.queryColumnData_link,
+    options = fa[1].options;
+
+    axios.post("/admin/categorySelectAll",
+      qs.stringify({
+        request_id: "99",
+        page: 1,
+        page_size: 100
+      })).
+    then((data) => {
+      data = data.data.data;
+      data.map(function(el, index){
+        options.push({
+          text: el.name,
+          value: ""+el.id
+        })
+      })
+      fa[1].options = options;
+      this.setState({
+        queryColumnData_link:fa
+      })
+    });
+
+  }
 
   handleSearch = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log('Received values of form: ', values);
+      for(let item in values){
+        values[item] = (values[item]==undefined)? "": values[item];
+      }
 
-      axios.get("http://localhost/rl/").then(function(data) {
-        console.log(data.data);
-      }).catch(function(err) {
-        console.error(err)
-      })
+      this.props.conds(values);
     });
   }
 
   // To generate mock Form.Item
   getFields() {
-    const c = queryColumnData_link.length;
+    let fa = this.state.queryColumnData_link;
+    const c = fa.length;
     const {
       getFieldDecorator
     } = this.props.form;
@@ -57,23 +82,23 @@ class AdvancedSearchForm extends React.Component {
     };
     const children = [];
     for (let i = 0; i < c; i++) {
-      if (queryColumnData_link[i].select) {
+      if (fa[i].select) {
         children.push(
           <Col span={8} key={i}>
 
           <FormItem
             { ...formItemLayout}
-            label={queryColumnData_link[i].col_name}
+            label={fa[i].col_name}
           >
             {
-              getFieldDecorator(queryColumnData_link[i].lb_for, {
+              getFieldDecorator(fa[i].lb_for, {
                 rules: [{required:false}]
               })(
                 <Select
-                  placeholder={queryColumnData_link[i].placeholder}
+                  placeholder={fa[i].placeholder}
                 >
                   {
-                    queryColumnData_link[i].options.map((el, i)=>(
+                    fa[i].options.map((el, i)=>(
                       <Option value={el.value} key={i}>{el.text}</Option>
                     ))
                   }
@@ -147,21 +172,27 @@ class AdvancedSearchForm extends React.Component {
 
 var LinkQ = Form.create()(AdvancedSearchForm);
 class LinkQuery extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        selectedChkbx: []
-      };
-      this.checkboxSel = this.checkboxSel.bind(this);
-      this.delLink = this.delLink.bind(this);
-    }
-    checkboxSel(selectedChkbx) {
-      this.setState({
-        selectedChkbx
-      })
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedChkbx: [],
+      filterObj:{
+        name:"",
+        category_id:"",
+        link_check_state:""
+      }
+    };
+    this.checkboxSel = this.checkboxSel.bind(this);
+    this.delLink = this.delLink.bind(this);
+    this.conds = this.conds.bind(this);
+  }
+  checkboxSel(selectedChkbx) {
+    this.setState({
+      selectedChkbx
+    })
+  }
 
-    delLink() {
+  delLink() {
     const link_ids = this.state.selectedChkbx;
     if (link_ids.length >= 1) {
       DialogModal.confirm(
@@ -174,7 +205,6 @@ class LinkQuery extends React.Component {
             })).
           then((data) => {
             data = data.data;
-            console.log(data)
             if (data.resp_cd == "00") {
               DialogModal.success(
                 data.resp_msg + ":该批次链接已被删除",
@@ -196,11 +226,16 @@ class LinkQuery extends React.Component {
     }
   }
 
+  conds(filterObj){
+    this.setState({
+      filterObj
+    });
+  }
+
     render() {
       return ( <
         div >
-        <
-        LinkQ / >
+        <LinkQ conds={this.conds}/>
         <
         Button type = "primary"
         size = "large"
@@ -224,7 +259,7 @@ class LinkQuery extends React.Component {
         </Button>
         {
           < div className = "search-result-list" >
-            <LinkQueryRes checkboxSel={this.checkboxSel}/>
+            <LinkQueryRes conds={this.state.filterObj} checkboxSel={this.checkboxSel}/>
           </div>
         }
       </div>

@@ -19,21 +19,22 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 class AdvancedSearchForm extends React.Component {
-  state = {
-    expand: false,
-  };
+
+  constructor(props){
+    super(props);
+    this.state = {
+      expand: false,
+    };
+  }
 
   handleSearch = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log(values);
-      console.log(JSON.stringify(values));
+      for(let item in values){
+        values[item] = (values[item]==undefined)? "": values[item];
+      }
 
-      axios.get("http://localhost/rl/").then(function(data) {
-        console.log(data.data);
-      }).catch(function(err) {
-        console.error(err)
-      })
+      this.props.conds(values);
     });
   }
 
@@ -121,10 +122,16 @@ class UserQuery extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedChkbx: []
+      selectedChkbx: [],
+      filterObj:{
+        username:"",
+        gender:"",
+        nickname:""
+      }
     };
     this.checkboxSel = this.checkboxSel.bind(this);
     this.delUser = this.delUser.bind(this);
+    this.conds = this.conds.bind(this);
   }
   checkboxSel(selectedChkbx) {
     this.setState({
@@ -167,10 +174,17 @@ class UserQuery extends React.Component {
     }
   }
 
+  conds(filterObj){
+    console.log(filterObj)
+    this.setState({
+      filterObj
+    });
+  }
+
   render() {
     return (
       <div>
-        <UserQ/>
+        <UserQ conds={this.conds}/>
         <Button
           type="primary"
           size="large"
@@ -188,7 +202,7 @@ class UserQuery extends React.Component {
         >批量删除用户</Button>
 
         <div className = "search-result-list" >
-          <UserQueryRes checkboxSel={this.checkboxSel}/>
+          <UserQueryRes conds={this.state.filterObj} checkboxSel={this.checkboxSel}/>
         </div>
       </div>
     )

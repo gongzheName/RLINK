@@ -2,7 +2,7 @@ const queryColumnData = [
     {
         col_name: "用户名",
         placeholder: "请输入用户名",
-        lb_for: "username"
+        lb_for: "name"
     },{
         col_name: "性别",
         placeholder: "--请选择--",

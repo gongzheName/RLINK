@@ -4,19 +4,15 @@ const queryColumnData_link = [{
   lb_for: "name"
 }, {
   col_name: "所属大类",
-  placeholder: "--请选择--",
+  placeholder: "--所有--",
   select: true,
   lb_for: "category_id",
   options: [{
-    text: "--请选择--",
+    text: "--所有--",
     value: ""
   }, {
-    text: "博客",
-    value: "1"
-
-  }, {
-    text: "生活",
-    value: "2"
+    text: "已被删除的大类",
+    value: "NULL"
   }]
 }, {
   col_name: "审核状态",

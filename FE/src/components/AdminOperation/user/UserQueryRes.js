@@ -44,21 +44,36 @@ const columns = [{
 class UserQueryRes extends React.Component {
   constructor(props){
     super(props);
+    console.log(props.conds);
     this.state = {
       selectedRowKeys: [],
       loading: false,
       dataTable: [],
       checkboxSel: this.props.checkboxSel,
       pagination: {},
-      data: []
+      data: [],
+      conditions: this.props.conds
     };
   }
 
   componentWillMount() {
     var th = this;
     th.fetch({
-      page: 1
+      page: 1,
+      conditions: JSON.stringify(this.state.conds)
     });
+  }
+
+  componentWillReceiveProps(nextProps){
+    var th = this;
+    this.setState({
+      conds:nextProps.conds
+    }, function(){
+      th.fetch({
+      page: 1,
+      conditions: JSON.stringify(this.state.conds)
+    });
+    })
   }
 
   onSelectChange = (selectedRowKeys) => {
@@ -84,6 +99,7 @@ class UserQueryRes extends React.Component {
       results: pagination.pageSize,
       page: pagination.current,
       ...filters,
+      conditions: JSON.stringify(this.state.conds)
     });
   }
 
@@ -96,7 +112,8 @@ class UserQueryRes extends React.Component {
       qs.stringify({
         request_id: "99",
         page: params.page,
-        page_size: 10
+        page_size: 10,
+        conditions: params.conditions
       })).
     then((data) => {
       const pagination = { ...th.state.pagination

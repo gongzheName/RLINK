@@ -12,8 +12,69 @@ import DialogModal from "../../modal/index";
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const userAddUrl = "/userAdd";
-const userUpdUrl = "/userUpdate";
+const userAddUrl = "/admin/userAdd";
+const userUpdUrl = "/admin/userUpdate";
+
+let optionList = ()=>(
+  <Select placeholder = "请选择一个链接大类" >
+    <Option value="1">China</Option>
+    <Option value="2">U.S.A</Option>
+  </Select>
+)
+
+axios.post("/admin/categorySelectAll",
+  qs.stringify({
+    request_id: "99",
+    page: 1,
+    page_size: 100
+  })).
+then((data) => {
+  data = data.data.data;
+  let tag;
+      data.map(function(el, index){
+        tag = ()=>(
+          <Option key={index} value={""+el.id}>{el.name}</Option>
+        )
+      })
+});
+
+
+class CtgrSelect extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      ctgrArr:[]
+    }
+
+  }
+
+  componentWillMount(){
+    let th = this;
+    axios.post("/admin/categorySelectAll",
+      qs.stringify({
+        request_id: "99",
+        page: 1,
+        page_size: 100
+      })).
+    then((data) => {
+      data = data.data.data;
+      th.setState({
+        ctgrArr:data
+      })
+    });
+  }
+
+  render(){
+    const{ctgrArr} = this.state;
+    return(
+      <Select placeholder = "请选择一个链接大类">
+        {ctgrArr.map(function(el, index){
+          return <Option key={index} value={""+el.id}>{el.name}</Option>
+        })}
+      </Select>
+    )
+  }
+}
 
 class RegistrationForm extends React.Component {
   constructor(props) {
@@ -25,46 +86,16 @@ class RegistrationForm extends React.Component {
     if (data > 0 && ((data | 0) === data)) {
       console.log(data);
       isUpdate = true;
-      let th = this;
-
-      /*axios.post("/getUserById",
-        qs.stringify({
-          request_id: "99",
-          user_id
-        })).then(function(data) {
-        let d = data.data.data[0]; //查询数据
-        let param1 = d.birth; //日期格式化
-        if (param1) {
-          param1 = new Date(param1);
-          let m = param1.getMonth();
-          if (m < 9) {
-            m = "0" + (m + 1);
-          } else {
-            m = m + 1;
-          }
-          param1 = param1.getFullYear() + "-" + m +
-            "-" + param1.getDate();
-          param1 = moment(param1, "YYYY-MM-DD");
-        } else {
-          param1 = null;
-        }
-        d.birth = param1;
-        th.props.form.setFieldsValue({
-          birth: d.birth,
-          email: d.email,
-          gender: d.gender,
-          name: d.name,
-          nickname: d.nickname,
-          introduce: d.introduce,
-          phone: d.phone
-        });
-      })*/
     }
 
     this.state = {
       confirmDirty: false,
       autoCompleteResult: [],
-      isUpdate
+      isUpdate,
+      ctgrs:[{
+        id:1,
+        name:"测试"
+      }]
     };
   }
   handleSubmit = (e) => {
@@ -197,10 +228,7 @@ class RegistrationForm extends React.Component {
             message: '必填字段!'
           }, ],
         })(
-          <Select placeholder = "请选择一个链接大类" >
-            <Option value="1">China</Option>
-            <Option value="2">U.S.A</Option>
-          </Select>
+          <CtgrSelect/>
         )
       }
       </FormItem>
