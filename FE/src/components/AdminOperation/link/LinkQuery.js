@@ -69,16 +69,10 @@ class AdvancedSearchForm extends React.Component {
   getFields() {
     let fa = this.state.queryColumnData_link;
     const c = fa.length;
-    const {
-      getFieldDecorator
-    } = this.props.form;
+    const {getFieldDecorator} = this.props.form;
     const formItemLayout = {
-      labelCol: {
-        span: 8
-      },
-      wrapperCol: {
-        span: 16
-      },
+      labelCol:{span:8},
+      wrapperCol:{span:16}
     };
     const children = [];
     for (let i = 0; i < c; i++) {
@@ -94,9 +88,7 @@ class AdvancedSearchForm extends React.Component {
               getFieldDecorator(fa[i].lb_for, {
                 rules: [{required:false}]
               })(
-                <Select
-                  placeholder={fa[i].placeholder}
-                >
+                <Select placeholder={fa[i].placeholder}>
                   {
                     fa[i].options.map((el, i)=>(
                       <Option value={el.value} key={i}>{el.text}</Option>
@@ -110,28 +102,19 @@ class AdvancedSearchForm extends React.Component {
 
         );
       } else {
-        children.push( <
-          Col span = {
-            8
-          }
-          key = {
-            i
-          } >
-          <
-          FormItem { ...formItemLayout
-          }
-          label = {
-            queryColumnData_link[i].col_name
-          } > {
-            getFieldDecorator(queryColumnData_link[i].lb_for)( <
-              Input placeholder = {
-                queryColumnData_link[i].placeholder
-              }
-              />
-            )
-          } <
-          /FormItem> <
-          /Col>
+        children.push(
+          <Col span={8} key={i}>
+            <FormItem
+              {...formItemLayout}
+              label={queryColumnData_link[i].col_name}
+            >
+              {getFieldDecorator(queryColumnData_link[i].lb_for)(
+                <Input
+                  placeholder={queryColumnData_link[i].placeholder}
+                />
+              )}
+            </FormItem>
+          </Col>
         );
       }
     }
@@ -139,33 +122,22 @@ class AdvancedSearchForm extends React.Component {
   }
 
   render() {
-    return ( <
-      Form className = "ant-advanced-search-form"
-      onSubmit = {
-        this.handleSearch
-      } >
-      <
-      Row gutter = {
-        40
-      } > {
-        this.getFields()
-      } < /Row> <
-      Row >
-      <
-      Col span = {
-        24
-      }
-      style = {
-        {
-          textAlign: 'right'
-        }
-      } >
-      <
-      Button type = "primary"
-      htmlType = "submit" > Search < /Button> <
-      /Col> <
-      /Row> <
-      /Form>
+    return (
+      <Form
+        className="ant-advanced-search-form"
+        onSubmit={this.handleSearch}>
+        <Row gutter={40}>
+          {this.getFields()}
+        </Row>
+
+        <Row>
+          <Col span={24} style={{textAlign:'right'}}>
+            <Button
+              type="primary"
+              htmlType="submit">Search</Button>
+          </Col>
+        </Row>
+      </Form>
     );
   }
 }

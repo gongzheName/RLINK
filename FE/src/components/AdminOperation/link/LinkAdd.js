@@ -15,67 +15,6 @@ const Option = Select.Option;
 const userAddUrl = "/admin/userAdd";
 const userUpdUrl = "/admin/userUpdate";
 
-let optionList = ()=>(
-  <Select placeholder = "请选择一个链接大类" >
-    <Option value="1">China</Option>
-    <Option value="2">U.S.A</Option>
-  </Select>
-)
-
-axios.post("/admin/categorySelectAll",
-  qs.stringify({
-    request_id: "99",
-    page: 1,
-    page_size: 100
-  })).
-then((data) => {
-  data = data.data.data;
-  let tag;
-      data.map(function(el, index){
-        tag = ()=>(
-          <Option key={index} value={""+el.id}>{el.name}</Option>
-        )
-      })
-});
-
-
-class CtgrSelect extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      ctgrArr:[]
-    }
-
-  }
-
-  componentWillMount(){
-    let th = this;
-    axios.post("/admin/categorySelectAll",
-      qs.stringify({
-        request_id: "99",
-        page: 1,
-        page_size: 100
-      })).
-    then((data) => {
-      data = data.data.data;
-      th.setState({
-        ctgrArr:data
-      })
-    });
-  }
-
-  render(){
-    const{ctgrArr} = this.state;
-    return(
-      <Select placeholder = "请选择一个链接大类">
-        {ctgrArr.map(function(el, index){
-          return <Option key={index} value={""+el.id}>{el.name}</Option>
-        })}
-      </Select>
-    )
-  }
-}
-
 class RegistrationForm extends React.Component {
   constructor(props) {
     super(props);
@@ -92,12 +31,61 @@ class RegistrationForm extends React.Component {
       confirmDirty: false,
       autoCompleteResult: [],
       isUpdate,
-      ctgrs:[{
-        id:1,
-        name:"测试"
-      }]
+      ctgrs:[]
     };
   }
+
+  componentWillMount(){
+    let th = this;
+    axios.post("/admin/categorySelectAll",
+      qs.stringify({
+        request_id: "99",
+        page: 1,
+        page_size: 100
+      })).
+    then((data) => {
+      data = data.data.data;
+      th.setState({
+        ctgrs:data
+      })
+    });
+  }
+
+  getCtgrFields() {
+    let ctgrs = this.state.ctgrs;
+    const {getFieldDecorator} = this.props.form;
+    const formItemLayout = {
+      labelCol: {xs:{span:24}, sm:{span:5}},
+      wrapperCol: {xs:{span:24}, sm:{span:16}},
+    };
+    return (
+
+      <FormItem
+        {...formItemLayout}
+        label = "所属大类"
+        hasFeedback
+        key="999"
+      >
+        {getFieldDecorator('category_id', {
+          rules: [{
+            required: true,
+            message: '必填字段!'
+          }, ],
+        })(
+          <Select placeholder="请选择一个链接大类">
+            {
+              ctgrs.map((el, i)=>(
+                <Option key={i} value={""+el.id}>{el.name}</Option>
+              ))
+            }
+          </Select>
+        )
+        }
+      </FormItem>
+
+    );
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -124,124 +112,91 @@ class RegistrationForm extends React.Component {
   }
 
   render() {
-    const {
-      getFieldDecorator
-    } = this.props.form;
+    const {getFieldDecorator}=this.props.form;
 
     const formItemLayout = {
-      labelCol: {
-        xs: {
-          span: 24
-        },
-        sm: {
-          span: 5
-        },
-      },
-      wrapperCol: {
-        xs: {
-          span: 24
-        },
-        sm: {
-          span: 16
-        },
-      },
+      labelCol: {xs:{span:24}, sm:{span:5}},
+      wrapperCol: {xs:{span:24}, sm:{span:16}},
     };
     const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 16,
-          offset: 8,
-        },
-      },
+      wrapperCol: {xs:{span:24,offset:0}, sm:{span:16,offset:8}},
     };
 
-    return ( <
-      Form onSubmit = {
-        this.handleSubmit
-      } >
-      <
-      div style = {
-        {
-          height: "20px"
-        }
-      } > < /div> <
-      FormItem { ...formItemLayout
-      }
-      label = "链接名称" >
-      {
-        getFieldDecorator('name', {
-          rules: [{
-            required: true,
-            message: '必填字段!',
-          }],
-        })( <
-          Input placeholder = "请输入连接名称" / >
-        )
-      } <
-      /FormItem>
-
-      <
-      FormItem { ...formItemLayout
-      }
-      label = "链接地址(URL)" >
-      {
-        getFieldDecorator('link', {
-          rules: [{
-            required: true,
-            message: '必填字段!',
-          }],
-        })( <
-          Input placeholder = "请输入您喜爱的链接地址"
-          readOnly = {
-            this.state.isUpdate ? true : false
+    return (
+      <Form onSubmit={this.handleSubmit}>
+        <div style={{height: "20px"}}> </div>
+        <FormItem
+          {...formItemLayout}
+          label = "链接名称"
+        >
+          {getFieldDecorator('name', {
+              rules: [{
+                required: true,
+                message: '必填字段!',
+              }],
+            })(
+              <Input placeholder = "请输入连接名称"/>
+            )
           }
-          />
-        )
-      } <
-      /FormItem> <
-      FormItem { ...formItemLayout
-      }
-      label = "链接描述" >
-      {
-        getFieldDecorator('description', {
-          rules: [{
-            required: false,
-            message: '必填字段!',
-          }],
-        })( <
-          Input placeholder = "请对您所添加的链接写一点介绍" / >
-        )
-      } <
-      /FormItem> <
-      FormItem { ...formItemLayout
-      }
-      label = "所属大类"
-      hasFeedback >
-      {
-        getFieldDecorator('category_id', {
-          rules: [{
-            required: true,
-            message: '必填字段!'
-          }, ],
-        })(
-          <CtgrSelect/>
-        )
-      }
-      </FormItem>
+        </FormItem>
 
+        <FormItem
+          {...formItemLayout}
+          label = "链接地址(URL)"
+        >
+          {getFieldDecorator('link', {
+              rules: [{
+                required: true,
+                message: '必填字段!',
+              }],
+            })(
+              <Input
+                placeholder="请输入您喜爱的链接地址"
+                readOnly={this.state.isUpdate? true : false}
+              />
+            )
+          }
+        </FormItem>
 
-      <
-      FormItem { ...tailFormItemLayout
-      } >
-      <
-      Button type = "primary"
-      htmlType = "submit" > 提交 < /Button> <
-      /FormItem> <
-      /Form>
+        <FormItem
+          {...formItemLayout}
+          label = "链接描述"
+        >
+          {getFieldDecorator('description', {
+              rules: [{
+                required: false,
+                message: '必填字段!',
+              }],
+            })(
+              <Input placeholder="请对您所添加的链接写一点介绍"/>
+            )
+          }
+        </FormItem>
+
+        <FormItem
+          {...formItemLayout}
+          label = "所属用户"
+        >
+          {getFieldDecorator('user_id', {
+            rules: [{
+              required: false,
+              message: '必填字段!',
+            }],
+          })(
+            <Input placeholder="请对您所添加的链接写一点介绍"/>
+          )
+          }
+        </FormItem>
+
+        {this.getCtgrFields()}
+
+        <FormItem {...tailFormItemLayout}>
+          <Button
+            type="primary"
+            htmlType="submit"
+          >提交</Button>
+        </FormItem>
+      </Form>
     );
   }
 }
