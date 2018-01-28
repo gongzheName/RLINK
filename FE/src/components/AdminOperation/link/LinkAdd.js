@@ -66,7 +66,7 @@ class RegistrationForm extends React.Component {
       autoCompleteResult: [],
       isUpdate,
       ctgrs:[],
-      user_id
+      user_id:3
     };
   }
 

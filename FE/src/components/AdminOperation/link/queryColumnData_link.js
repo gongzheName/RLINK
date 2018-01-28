@@ -11,7 +11,7 @@ const queryColumnData_link = [{
     text: "--所有--",
     value: ""
   }, {
-    text: "已被删除的大类",
+    text: "未分类",
     value: "NULL"
   }]
 }, {
