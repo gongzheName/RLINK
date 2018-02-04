@@ -10,6 +10,7 @@ import DialogModal from "../../modal/index";
 
 const updLink = (ev) => {
   var link_id = ev.target.previousSibling.value;
+  console.log(link_id)
   window.location.href =
     "#/link-add?" +
     window.btoa("link_id=" + link_id + "&random=" +
@@ -39,19 +40,11 @@ const columns = [{
 }, {
   title: '操作',
   dataIndex: 'delete',
-  render: (text, record) => ( <
-    span >
-    <
-    input type = "hidden"
-    value = {
-      record.id
-    }
-    /> <
-    a href = "javascript:void(0);"
-    onClick = {
-      updLink
-    } > 修改链接信息 < /a> <
-    /span>
+  render: (text, record) => (
+    <span>
+      <input type="hidden" value={record.id}/>
+      <a href="javascript:void(0);" onClick={updLink}>修改链接信息</a>
+    </span>
   ),
 }];
 

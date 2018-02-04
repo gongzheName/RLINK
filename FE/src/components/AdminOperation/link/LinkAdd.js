@@ -21,6 +21,7 @@ class RegistrationForm extends React.Component {
     let link_id = this.props.location.search; //获取base64编码
     let isUpdate = false;
     link_id = window.atob(link_id.substr(1, )); //解析
+    console.log(link_id)
     link_id = parseInt(link_id.split("=")[1]);
 
     if (link_id > 0 && ((link_id | 0) === link_id)) {
@@ -33,30 +34,13 @@ class RegistrationForm extends React.Component {
           link_id
         })).then(function(data) {
         let d = data.data.data[0]; //查询数据
-        let param1 = d.birth; //日期格式化
-        if (param1) {
-          param1 = new Date(param1);
-          let m = param1.getMonth();
-          if (m < 9) {
-            m = "0" + (m + 1);
-          } else {
-            m = m + 1;
-          }
-          param1 = param1.getFullYear() + "-" + m +
-            "-" + param1.getDate();
-          param1 = moment(param1, "YYYY-MM-DD");
-        } else {
-          param1 = null;
-        }
-        d.birth = param1;
+        console.log(d)
+
         th.props.form.setFieldsValue({
-          birth: d.birth,
-          email: d.email,
-          gender: d.gender,
           name: d.name,
-          nickname: d.nickname,
-          introduce: d.introduce,
-          phone: d.phone
+          link: d.link,
+          description: d.description,
+          category_id: d.category_id
         });
       })
     }
@@ -66,8 +50,9 @@ class RegistrationForm extends React.Component {
       autoCompleteResult: [],
       isUpdate,
       ctgrs:[],
-      user_id:3
+      link_id
     };
+
   }
 
   componentWillMount(){
@@ -102,6 +87,7 @@ class RegistrationForm extends React.Component {
         key="999"
       >
         {getFieldDecorator('category_id', {
+          initialValue: "hehe",
           rules: [{
             required: true,
             message: '必填字段!'
@@ -214,21 +200,6 @@ class RegistrationForm extends React.Component {
             })(
               <Input placeholder="请对您所添加的链接写一点介绍"/>
             )
-          }
-        </FormItem>
-
-        <FormItem
-          {...formItemLayout}
-          label = "所属用户"
-        >
-          {getFieldDecorator('user_id', {
-            rules: [{
-              required: false,
-              message: '必填字段!',
-            }],
-          })(
-            <Input readOnly={true} placeholder="请对您所添加的链接写一点介绍"/>
-          )
           }
         </FormItem>
 
