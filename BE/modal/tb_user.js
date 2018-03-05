@@ -3,7 +3,7 @@
 
 
 
-app.post("/userAdd", function(req, res){
+function Add(req, res){ //添加用户
   try {
     var reqMsgBody = JSON.parse(req.body.msg_body);//获取参数
     reqMsgBody.password = md5(reqMsgBody.password);//MD5加密
@@ -30,10 +30,10 @@ app.post("/userAdd", function(req, res){
   }catch(err){//运行错误
     console.log(err);
   }
-});
+}
 
 
-app.post("/userUpdate", function(req, res){
+function Update(req, res){ //更新
   try {
     var reqMsgBody = JSON.parse(req.body.msg_body);//获取参数
 
@@ -44,6 +44,7 @@ app.post("/userUpdate", function(req, res){
     //数据库操作
     conn.query(update_tb_user, {}, function (err, rows, fields) {
       if(err){//操作失败
+        console.log(err);
         res.send({resp_cd:"01",resp_msg:"系统错误，请稍后重试！"});
         return;
       }
@@ -59,10 +60,10 @@ app.post("/userUpdate", function(req, res){
   }catch(err){//运行错误
     console.log(err);
   }
-});
+}
 
 
-app.post("/userSelectAll", function(req, res){
+/*app.post("/userSelectAll", function(req, res){
   try {
 
     req.body.page = (req.body.page-1)*(req.body.page_size);
@@ -185,4 +186,12 @@ app.post("/userDel", function(req, res){
   }catch(err){//运行错误
     console.log(err);
   }
-})
+})*/
+
+
+module.exports = {
+  Add:Add
+}
+
+
+

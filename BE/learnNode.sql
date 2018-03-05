@@ -12,7 +12,8 @@ module.exports = add;
 //阻塞和非阻塞
 //EventEmmitter
 
-
+//node改变代码无需重启
+cnpm install supervisor -g && supervisor node app
 
 
 
