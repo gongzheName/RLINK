@@ -39,7 +39,6 @@ class CtgrQuery extends React.Component{
         function() {
           axios.post("/admin/categoryDel",
             qs.stringify({
-              request_id: "99",
               category_ids: JSON.stringify(category_ids)
             })).
           then((data) => {
@@ -88,7 +87,7 @@ class CtgrQuery extends React.Component{
     let th = this;
 
     let requestData = {};
-    requestData.request_id="99";
+    //requestData.request_id="99";
     requestData.msg_body=JSON.stringify({
       name:document.getElementById("category_name").value
     });

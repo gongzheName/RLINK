@@ -37,7 +37,6 @@ class RegistrationForm extends React.Component {
 
       axios.post("/admin/getUserById",
         qs.stringify({
-          request_id: "99",
           user_id
         })).then(function(data) {
         let d = data.data.data[0]; //查询数据
@@ -114,7 +113,7 @@ class RegistrationForm extends React.Component {
         }
         let request_data = {}; //传给后台的参数
         request_data.msg_body = JSON.stringify(msg_body);
-        request_data.request_id = "99";
+        //request_data.request_id = "99";
 
         let requestUrl = this.state.isUpdate ? userUpdUrl : userAddUrl;
         axios.post(requestUrl,

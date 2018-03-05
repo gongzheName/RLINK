@@ -120,6 +120,8 @@ class UserQueryRes extends React.Component {
       };
       data = data.data;
 
+      console.log(data, "12345")
+
       if (data.resp_cd == "00") {
         for (let i = 0; i < data.data.length; i++) {
           data.data[i].key = i;
@@ -139,6 +141,13 @@ class UserQueryRes extends React.Component {
           pagination,
         });
       } else {
+
+        th.setState({
+          loading: false,
+          data: [],
+          pagination,
+        });
+
         DialogModal.info({
           content: data.resp_msg
         })

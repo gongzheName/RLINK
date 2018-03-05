@@ -30,7 +30,6 @@ class RegistrationForm extends React.Component {
 
       axios.post("/admin/getLinkById",
         qs.stringify({
-          request_id: "99",
           link_id
         })).then(function(data) {
         let d = data.data.data[0]; //查询数据
@@ -59,11 +58,11 @@ class RegistrationForm extends React.Component {
     let th = this;
     axios.post("/admin/categorySelectAll",
       qs.stringify({
-        request_id: "99",
         page: 1,
         page_size: 100
       })).
     then((data) => {
+      console.log(data)
       data = data.data.data;
       th.setState({
         ctgrs:data
@@ -87,7 +86,7 @@ class RegistrationForm extends React.Component {
         key="999"
       >
         {getFieldDecorator('category_id', {
-          initialValue: "hehe",
+          initialValue: "1",
           rules: [{
             required: true,
             message: '必填字段!'
@@ -120,7 +119,6 @@ class RegistrationForm extends React.Component {
         var msg_body = values;
         var request_data = {
           msg_body: JSON.stringify(msg_body),
-          request_id: "99"
         };
         console.log('Received values of form: ', request_data);
         axios.post("/admin/linkAdd", qs.stringify(request_data))

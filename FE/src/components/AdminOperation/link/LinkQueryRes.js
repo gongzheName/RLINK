@@ -117,7 +117,6 @@ class LinkQueryRes extends React.Component {
     });
     axios.post("/admin/linkSelectAll",
       qs.stringify({
-        request_id: "99",
         page: params.page,
         page_size: 10,
         conditions: params.conditions

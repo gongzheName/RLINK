@@ -34,7 +34,6 @@ class AdvancedSearchForm extends React.Component {
 
     axios.post("/admin/categorySelectAll",
       qs.stringify({
-        request_id: "99",
         page: 1,
         page_size: 100
       })).
@@ -172,7 +171,6 @@ class LinkQuery extends React.Component {
         function() {
           axios.post("/admin/linkDel",
             qs.stringify({
-              request_id: "99",
               link_ids: JSON.stringify(link_ids)
             })).
           then((data) => {

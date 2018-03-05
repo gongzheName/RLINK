@@ -109,7 +109,6 @@ class CtgrQueryRes extends React.Component {
     });
     axios.post("/admin/categorySelectAll",
       qs.stringify({
-        request_id: "99",
         page: params.page,
         page_size: 10
       })).
