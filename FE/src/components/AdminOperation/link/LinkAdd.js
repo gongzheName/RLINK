@@ -86,7 +86,7 @@ class RegistrationForm extends React.Component {
         key="999"
       >
         {getFieldDecorator('category_id', {
-          initialValue: "1",
+          initialValue: "请选择",
           rules: [{
             required: true,
             message: '必填字段!'
