@@ -26,17 +26,20 @@ const columns = [{
   dataIndex: 'link',
 }, {
   title: '所属类别',
-  dataIndex: 'category',
+  dataIndex: 'category_id',
 }, {
   title: '审核状态',
-  dataIndex: 'link_icon_url',
-  render: (text, record) => ( <
-    img width = "27px"
-    src = {
-      record.link_icon_url
+  dataIndex: 'link_check_state',
+  render: (text, record) => {
+    switch(text){
+      case 0:
+        return "未审核";
+        break;
+      case 1:
+        return "审核通过";
+        break;
     }
-    />
-  ),
+  }
 }, {
   title: '操作',
   dataIndex: 'delete',

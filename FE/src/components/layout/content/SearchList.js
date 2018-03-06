@@ -15,17 +15,17 @@ const Option = Select.Option;
 class SearchList extends React.Component {
 	constructor(props){
 		super(props);
-		this.test = this.test.bind(this);
-		this.state = {
-			wd: "",
-			searchResList: []
-		}
+    this.test = this.test.bind(this);
+    this.state = {
+      wd: "",
+      searchResList: []
+    }
 	}
 
 	getSearchResList(wd){
 		let th = this;
-		axios.get("/linkCtgr.json?wd="+wd).then(function(data){
-			let searchResList = data.data;
+		axios.get("/search?wd="+wd).then(function(data){
+			let searchResList = data.data.data;
 			searchResList = typeof(searchResList)=="string"?
 							 JSON.parse(searchResList):
 							 searchResList;
@@ -37,28 +37,20 @@ class SearchList extends React.Component {
 		})
 	}
 
-    componentWillMount() {
+    componentDidMount() {
     	let wd = window.decodeURIComponent(window.location.hash.split("?")[1].split("=")[1]);
     	this.setState({wd});
-		this.getSearchResList(wd);
+		  this.getSearchResList(wd);
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({wd});
-		this.getSearchResList(wd);
+      let wd = window.decodeURIComponent(nextProps.location.search.split("=")[1]);
+      this.setState({wd:wd});
+		  this.getSearchResList(wd);
     }
 	test(){
 		console.log(this)
 	}
-
-	renderTabPane(){
-		this.state.searchResList.map(function(el, key) {
-			return(
-			  <TabPane tab={list()} key={key}></TabPane>
-			)
-		  })
-	}
-
 
   render() {
     return (

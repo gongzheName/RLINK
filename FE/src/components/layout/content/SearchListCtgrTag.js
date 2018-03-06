@@ -15,12 +15,10 @@ class SearchListCtgrTag extends React.Component{
 	}
 
 	getSearchList(page, pageSize){
-		console.log(page, pageSize, "pagePageSize")
 		let th = this;
-		axios.get("/link_list.json?wd="+this.state.wd+"&category_id="+th.state.category_id).then(function(data){
-    		console.log(data.data);
+		axios.get("/searchLinkList?wd="+this.state.wd+"&category_id="+th.state.category_id).then(function(data){
     		th.setState({
-    			searchList: data.data
+    			searchList: data.data.data
     		})
     	})
 	}
@@ -74,7 +72,7 @@ class SearchListCtgrTag extends React.Component{
 									style={{backgroundColor:"#2b7489"}}
 									className="repo-language-color ml-0"
 								></span>
-								{el.username}
+								管理员
 							</div>
 						</div>
 					</div>

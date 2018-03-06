@@ -12,8 +12,8 @@ import DialogModal from "../../modal/index";
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const userAddUrl = "/admin/userAdd";
-const userUpdUrl = "/admin/userUpdate";
+const linkAddUrl = "/admin/linkAdd";
+const linkUpdUrl = "/admin/linkUpdate";
 
 class RegistrationForm extends React.Component {
   constructor(props) {
@@ -115,18 +115,24 @@ class RegistrationForm extends React.Component {
           return;
         }
 
+        let tipmsg = "新增链接成功！",
+          msg_body = values;
+        if (th.state.user_id) {
+          msg_body.id = th.state.user_id;
+          tipmsg = "链接修改成功";
+        }
+
         values.user_id = "1";
-        var msg_body = values;
         var request_data = {
           msg_body: JSON.stringify(msg_body),
         };
-        console.log('Received values of form: ', request_data);
-        axios.post("/admin/linkAdd", qs.stringify(request_data))
+        let requestUrl = this.state.isUpdate ? userUpdUrl : userAddUrl;
+        axios.post(requestUrl, qs.stringify(request_data))
           .then(function(data) {
             data = data.data;
             if(data.resp_cd == "00"){
               DialogModal.info(
-                "新增链接成功",
+                tipmsg,
                 function(){
                   window.location.href="#/link-mng";
                 }
