@@ -77,22 +77,36 @@ function SelectAll(req, res){
 
       var data = [];
       rows.forEach(function(item, index){
-        data.push({
-          id:item.id,
-          name:item.name,
-          link:item.link,
-          category_id:item.category_id,
-          link_check_state:item.link_check_state
+
+        var promise = new Promise(function(resolve, reject){
+          conn.query("SELECT name FROM tb_category WHERE id="+item.category_id,
+            {}, function(err, rowsIn, field){
+            if(err){//操作失败
+              console.log(err);
+              res.send({resp_cd:"01",resp_msg:"系统错误，请稍后重试！"});
+              return;
+            }
+            resolve(rowsIn[0].name);
+          });
+        }).then(function(value){
+          data.push({
+            id:item.id,
+            name:item.name,
+            link:item.link,
+            //category_id:item.category_id,
+            category_id:value,
+            link_check_state:item.link_check_state
+          })
+          if(++index == rows.length || (rows.length==0)){
+            //操作成功返回数据
+            var responseData={};
+            responseData.resp_cd="00";
+            responseData.resp_msg="分页查询成功";
+            responseData.data=data;
+            res.send(responseData);
+          }
         })
       });
-
-      //操作成功返回数据
-      var responseData={};
-      responseData.resp_cd="00";
-      responseData.resp_msg="分页查询成功";
-      responseData.data=data;
-      res.send(responseData);
-      return;
     });
 
   }catch(err){//运行错误
