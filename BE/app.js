@@ -7,6 +7,7 @@ var tbUser = require("./db_mapper/user/index");//user表
 var TbUserBusiness = require("./business/userBusiness/index");
 var TbLinkBusiness = require("./business/linkBusiness/index");
 var TbCategoryBusiness = require("./business/categoryBusiness/index");
+var searchBusiness = require("./business/searchBusiness/index");
 
 var md5=require("md5");//MD5加密
 app.use(bodyParser.urlencoded({ extended: false }));// 解析post报文
@@ -60,8 +61,8 @@ app.post("/admin/getCategoryById", TbCategoryBusiness.getInfoById);
 app.post("/admin/categoryDel", TbCategoryBusiness.Delete);
 
 
-
-
+app.get("/search", searchBusiness.doService);
+app.get("/searchLinkList", searchBusiness.searchLinkList);
 
 
 
