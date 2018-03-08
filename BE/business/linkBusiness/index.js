@@ -1,3 +1,7 @@
+
+var Util = require("../../util/index"); //工具类
+
+
 //链接表具体业务处理
 var tbLink = require("../../db_mapper/link/index");//link表
 var conn = require("../../db_mapper/connection/index");//连接数据库
@@ -34,11 +38,10 @@ function Add(req, res){ //添加
 function Update(req, res){
   try {
     var reqMsgBody = JSON.parse(req.body.msg_body);//获取参数
-
+    reqMsgBody.update_datetime = Util.getRealTime();//获取实时时间
     //SQL
     var linkUpdate = tbLink.tbLinkUpdate(reqMsgBody);
     var update_tb_link = linkUpdate.replace(/''/g, "NULL");
-
     //数据库操作
     conn.query(update_tb_link, {}, function (err, rows, fields) {
       if(err){//操作失败
@@ -65,7 +68,7 @@ function SelectAll(req, res){
 
     req.body.page = (req.body.page-1)*(req.body.page_size);
     //SQL
-    var select_all_by_page_tb_link = tbLink.tbLinkSelectAll(req.body);
+    var select_all_by_page_tb_link = tbLink.tbLinkSelectAll(req.body), responseData={};
 
     //数据库操作
     conn.query(select_all_by_page_tb_link, {}, function (err, rows, fields) {
@@ -75,38 +78,44 @@ function SelectAll(req, res){
         return;
       }
 
-      var data = [];
-      rows.forEach(function(item, index){
+      if(rows.length <= 0){
+        responseData.resp_cd="00";
+        responseData.resp_msg="分页查询成功";
+        responseData.data=[];
+        res.send(responseData);
+      }else{
+        var data = [];
+        rows.forEach(function(item, index){
 
-        var promise = new Promise(function(resolve, reject){
-          conn.query("SELECT name FROM tb_category WHERE id="+item.category_id,
-            {}, function(err, rowsIn, field){
-            if(err){//操作失败
-              console.log(err);
-              res.send({resp_cd:"01",resp_msg:"系统错误，请稍后重试！"});
-              return;
+          var promise = new Promise(function(resolve, reject){
+            conn.query("SELECT name FROM tb_category WHERE id="+item.category_id,
+              {}, function(err, rowsIn, field){
+              if(err){//操作失败
+                console.log(err);
+                res.send({resp_cd:"01",resp_msg:"系统错误，请稍后重试！"});
+                return;
+              }
+              resolve(rowsIn[0].name);
+            });
+          }).then(function(value){
+            data.push({
+              id:item.id,
+              name:item.name,
+              link:item.link,
+              //category_id:item.category_id,
+              category_id:value,
+              link_check_state:item.link_check_state
+            })
+            if(++index == rows.length || (rows.length==0)){
+              //操作成功返回数据
+              responseData.resp_cd="00";
+              responseData.resp_msg="分页查询成功";
+              responseData.data=data;
+              res.send(responseData);
             }
-            resolve(rowsIn[0].name);
-          });
-        }).then(function(value){
-          data.push({
-            id:item.id,
-            name:item.name,
-            link:item.link,
-            //category_id:item.category_id,
-            category_id:value,
-            link_check_state:item.link_check_state
           })
-          if(++index == rows.length || (rows.length==0)){
-            //操作成功返回数据
-            var responseData={};
-            responseData.resp_cd="00";
-            responseData.resp_msg="分页查询成功";
-            responseData.data=data;
-            res.send(responseData);
-          }
-        })
-      });
+        });
+      }
     });
 
   }catch(err){//运行错误

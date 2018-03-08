@@ -21,7 +21,8 @@ var tbLinkUpdate  = function(data){
   return multiline(function(){/*
 
     UPDATE `tb_link` SET name='#{name}', link='#{link}', user_id='#{user_id}',
-    category_id='#{category_id}', description='#{description}'
+    category_id='#{category_id}', description='#{description}',
+    update_datetime='#{update_datetime}'
     WHERE id='#{id}';
 
   */}, {
@@ -30,7 +31,8 @@ var tbLinkUpdate  = function(data){
     link:data.link,
     user_id:data.user_id || '',
     category_id:data.category_id || '',
-    description:data.description || ''
+    description:data.description || '',
+    update_datetime:data.update_datetime
   });
 }
 

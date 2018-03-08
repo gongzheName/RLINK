@@ -5,6 +5,8 @@ var tbCategory = require("../../db_mapper/category/index");//category表
 var search = require("../../db_mapper/search/index");
 var conn = require("../../db_mapper/connection/index");//连接数据库
 
+var Util = require("../../util/index"); //工具类
+
 function doService(req, res){
   try {
     //console.log(req.query.wd);
@@ -91,6 +93,7 @@ function searchLinkList(req, res){
         data=[], responseData={};
     //SQL
     var search_link_list = search.linkList(req.query);
+    console.log(search_link_list, "66")
 
     //数据库操作
     conn.query(search_link_list, {}, function (err, rows, fields) {
@@ -102,6 +105,8 @@ function searchLinkList(req, res){
 
       if(rows.length == 0){
         var search_all_link = search.allLinkList({category_id:req.query.category_id});
+
+        console.log(search_all_link, "77")
         conn.query(search_all_link, {}, function(err, rowsEmpty, fields){
           if(err){//操作失败
             console.log(err);
@@ -109,35 +114,41 @@ function searchLinkList(req, res){
             return;
           }
           rowsEmpty.forEach(function(item, index){
+            console.log(item, "88")
+            var t = Util.formatDate(item.update_datetime);
             data.push({
               name:item.name,
               link:item.link,
               description:item.description,
-              update_time:item.update_time
+              update_time:t
             });
           })
           //操作成功返回数据
           responseData.resp_cd="00";
           responseData.resp_msg="查询成功";
+          responseData.is_empty="true";
           responseData.data=data;
+          console.log(responseData.data, "99")
           res.send(responseData);
         })
-      }
+      }else{
+        rows.forEach(function(item, index){
 
-      rows.forEach(function(item, index){
-
-        data.push({
-          name:item.name,
-          link:item.link,
-          description:item.description,
-          update_time:item.update_time
+          var t = Util.formatDate(item.update_datetime);
+          data.push({
+            name:item.name,
+            link:item.link,
+            description:item.description,
+            update_time:t
+          });
+          //操作成功返回数据
+          responseData.resp_cd="00";
+          responseData.resp_msg="查询成功";
+          responseData.is_empty="false";
+          responseData.data=data;
+          res.send(responseData);
         });
-        //操作成功返回数据
-        responseData.resp_cd="00";
-        responseData.resp_msg="查询成功";
-        responseData.data=data;
-        res.send(responseData);
-      })
+      }
     });
 
   }catch(err){//运行错误
