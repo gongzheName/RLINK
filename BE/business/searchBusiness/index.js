@@ -13,6 +13,7 @@ function doService(req, res){
     var keyword = req.query.wd, data=[], responseData={};
     //SQL
     var search_by_key_word = search.searchCategoryName(keyword);
+    console.log(search_by_key_word, "11")
 
     //数据库操作
     conn.query(search_by_key_word, {}, function (err, rows, fields) {
@@ -24,6 +25,7 @@ function doService(req, res){
 
       if(rows.length == 0){
         var all_search = search.allSearchCategoryName();
+        console.log(all_search, "22")
         conn.query(all_search, {}, function(err, rowsEmpty, fields){
           if(err){//操作失败
             console.log(err);
@@ -53,32 +55,33 @@ function doService(req, res){
             })
           })
         })
-      }
-      rows.forEach(function(item, index){
-
-        var queryData = {keyword:keyword, category_id:item.id};
-        var search_link_total = search.searchLinkTotal(queryData);
-        var promise = new Promise(function(resolve, reject){
-          conn.query(search_link_total, {}, function(err, rowsIn, fields){
-            data.push({
-              category_name:item.name,
-              category_id:item.id,
-              total:rowsIn[0]["COUNT(*)"]
+      }else{
+        rows.forEach(function(item, index){
+console.log(item, "33")
+          var queryData = {keyword:keyword, category_id:item.id};
+          var search_link_total = search.searchLinkTotal(queryData);
+          var promise = new Promise(function(resolve, reject){
+            conn.query(search_link_total, {}, function(err, rowsIn, fields){
+              data.push({
+                category_name:item.name,
+                category_id:item.id,
+                total:rowsIn[0]["COUNT(*)"]
+              });
+              resolve(0);
             });
-            resolve(0);
-          });
-        }).then(function(value){
-          //console.log(rows);
-          if(++index == rows.length || (rows.length==0)){
-            //操作成功返回数据
-            responseData.resp_cd="00";
-            responseData.resp_msg="查询成功";
-            responseData.data=data;
-            res.send(responseData);
-          }
-        })
+          }).then(function(value){
+            //console.log(rows);
+            if(++index == rows.length || (rows.length==0)){
+              //操作成功返回数据
+              responseData.resp_cd="00";
+              responseData.resp_msg="查询成功";
+              responseData.data=data;
+              res.send(responseData);
+            }
+          })
 
-      })
+        })
+      }
     });
 
   }catch(err){//运行错误
@@ -93,7 +96,6 @@ function searchLinkList(req, res){
         data=[], responseData={};
     //SQL
     var search_link_list = search.linkList(req.query);
-    console.log(search_link_list, "66")
 
     //数据库操作
     conn.query(search_link_list, {}, function (err, rows, fields) {
@@ -104,9 +106,8 @@ function searchLinkList(req, res){
       }
 
       if(rows.length == 0){
-        var search_all_link = search.allLinkList({category_id:req.query.category_id});
+        var search_all_link = search.allLinkList(req.query);
 
-        console.log(search_all_link, "77")
         conn.query(search_all_link, {}, function(err, rowsEmpty, fields){
           if(err){//操作失败
             console.log(err);
@@ -114,7 +115,6 @@ function searchLinkList(req, res){
             return;
           }
           rowsEmpty.forEach(function(item, index){
-            console.log(item, "88")
             var t = Util.formatDate(item.update_datetime);
             data.push({
               name:item.name,
@@ -128,7 +128,6 @@ function searchLinkList(req, res){
           responseData.resp_msg="查询成功";
           responseData.is_empty="true";
           responseData.data=data;
-          console.log(responseData.data, "99")
           res.send(responseData);
         })
       }else{
@@ -146,6 +145,7 @@ function searchLinkList(req, res){
           responseData.resp_msg="查询成功";
           responseData.is_empty="false";
           responseData.data=data;
+          console.log(responseData)
           res.send(responseData);
         });
       }

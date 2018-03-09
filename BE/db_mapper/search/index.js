@@ -37,11 +37,14 @@ var linkList = function(data){
 
     SELECT * FROM `tb_link` WHERE category_id=#{category_id} AND
         (name LIKE '%#{keyword}%' OR link LIKE '%#{keyword}%'
-        OR description LIKE '%#{keyword}%');
+        OR description LIKE '%#{keyword}%')
+        ORDER BY update_datetime LIMIT #{page},#{page_size};
 
   */}, {
     keyword: data.wd,
-    category_id: data.category_id
+    category_id: data.category_id,
+    page: data.page,
+    page_size:data.page_size
   });
 }
 
@@ -70,11 +73,14 @@ var allSearchLinkTotal = function(data){
 var allLinkList = function(data){
   return multiline(function(){/*
 
-    SELECT * FROM `tb_link` WHERE category_id=#{category_id};
+    SELECT * FROM `tb_link` WHERE category_id=#{category_id}
+      ORDER BY update_datetime LIMIT #{page},#{page_size};
 
   */}, {
     keyword: data.keyword,
-    category_id: data.category_id
+    category_id: data.category_id,
+    page: data.page,
+    page_size:data.page_size
   });
 }
 
