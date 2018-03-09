@@ -21,7 +21,6 @@ class RegistrationForm extends React.Component {
     let link_id = this.props.location.search; //获取base64编码
     let isUpdate = false;
     link_id = window.atob(link_id.substr(1, )); //解析
-    console.log(link_id)
     link_id = parseInt(link_id.split("=")[1]);
 
     if (link_id > 0 && ((link_id | 0) === link_id)) {
@@ -33,7 +32,6 @@ class RegistrationForm extends React.Component {
           link_id
         })).then(function(data) {
         let d = data.data.data[0]; //查询数据
-        console.log(d)
 
         th.props.form.setFieldsValue({
           name: d.name,
@@ -62,7 +60,6 @@ class RegistrationForm extends React.Component {
         page_size: 100
       })).
     then((data) => {
-      console.log(data)
       data = data.data.data;
       th.setState({
         ctgrs:data
@@ -117,8 +114,8 @@ class RegistrationForm extends React.Component {
 
         let tipmsg = "新增链接成功！",
           msg_body = values;
-        if (th.state.user_id) {
-          msg_body.id = th.state.user_id;
+        if (this.state.isUpdate) {
+          msg_body.id = this.state.link_id;
           tipmsg = "链接修改成功";
         }
 
@@ -126,7 +123,7 @@ class RegistrationForm extends React.Component {
         var request_data = {
           msg_body: JSON.stringify(msg_body),
         };
-        let requestUrl = this.state.isUpdate ? userUpdUrl : userAddUrl;
+        let requestUrl = this.state.isUpdate ? linkUpdUrl : linkAddUrl;
         axios.post(requestUrl, qs.stringify(request_data))
           .then(function(data) {
             data = data.data;

@@ -44,7 +44,7 @@ class SearchList extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-      let wd = window.decodeURIComponent(nextProps.location.search.split("=")[1]);
+      let wd = window.decodeURIComponent(window.location.href.split("=")[1]);
       this.setState({wd:wd});
 		  this.getSearchResList(wd);
     }
