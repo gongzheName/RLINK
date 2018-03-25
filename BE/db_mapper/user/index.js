@@ -44,14 +44,56 @@ var tbUserUpdate  = function(data){
 
 
 var tbUserSelectAll  = function(data){
+
   return multiline(function(){/*
 
-    SELECT * FROM `tb_user` LIMIT #{page},#{page_size};
+    SELECT * FROM `tb_user` WHERE name='#{name}' AND gender='#{gender}'
+    AND nickname='#{nickname}' LIMIT #{page},#{page_size};
 
   */}, {
     page: data.page,
-    page_size: data.page_size
+    page_size: data.page_size,
+    name: data.conditions.name,
+    gender:data.conditions.gender,
+    nickname:data.conditions.nickname
   });
+}
+
+
+var tbUserSelectAllCond = function(data){
+  var sql = "SELECT * FROM `tb_user` WHERE ";
+  if(data.conditions.name){
+    sql = sql + "name='"+data.conditions.name+"' AND ";
+  }
+  if(data.conditions.gender){
+    sql = sql + "gender='"+data.conditions.gender+"' AND ";
+  }
+  if(data.conditions.nickname){
+    sql = sql + "nickname='"+data.conditions.nickname+"';";
+  }
+  sql = sql + "LIMIT " + data.page+", "+data.page_size+";";
+  sql = sql.replace("AND LIMIT", "LIMIT");
+  sql = sql.replace("WHERE LIMIT", "LIMIT");
+  return sql;
+}
+
+
+var tbUserTotal = function(data){
+  var sql = "SELECT COUNT(*) FROM `tb_user` WHERE ";
+  if(data.name){
+    sql = sql + "name='"+data.name+"' AND ";
+  }
+  if(data.gender){
+    sql = sql + "gender='"+data.gender+"' AND ";
+  }
+  if(data.nickname){
+    sql = sql + "nickname='"+data.nickname+"'";
+  }
+  sql += ";";
+  sql = sql.replace("AND ;", ";");
+  sql = sql.replace("WHERE ;", ";");
+  return sql;
+
 }
 
 
@@ -86,6 +128,8 @@ var tbUserDelete = function(user_ids){
 module.exports = {
   tbUserAdd:tbUserAdd,
   tbUserSelectAll:tbUserSelectAll,
+  tbUserSelectAllCond:tbUserSelectAllCond,
+  tbUserTotal:tbUserTotal,
   tbUserFindByPkId:tbUserFindByPkId,
   tbUserUpdate:tbUserUpdate,
   tbUserDelete:tbUserDelete

@@ -33,10 +33,10 @@ CREATE TABLE `tb_user` (
   `introduce` varchar(100) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `phone` varchar(11) DEFAULT NULL,
-  `register_datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `login_count` int(11) NOT NULL DEFAULT '0',
+  `register_datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  `login_count` int(11) NOT NULL DEFAULT 0,
   `last_login_datetime` datetime DEFAULT NULL,
-  `bonus` int(11) NOT NULL DEFAULT '0',
+  `bonus` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8;
 ALTER TABLE `tb_user` ALTER COLUMN bonus set default 0;
@@ -54,8 +54,8 @@ CREATE TABLE `tb_link` (
   `link` varchar(300) NOT NULL,
   `user_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
-  `add_datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `add_datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  `update_datetime` timestamp NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   `link_check_state` smallint(6) NOT NULL DEFAULT '0',
   `complaints_count` int(11) NOT NULL DEFAULT '0',

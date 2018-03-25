@@ -38,7 +38,7 @@ var linkList = function(data){
     SELECT * FROM `tb_link` WHERE category_id=#{category_id} AND
         (name LIKE '%#{keyword}%' OR link LIKE '%#{keyword}%'
         OR description LIKE '%#{keyword}%')
-        ORDER BY update_datetime LIMIT #{page},#{page_size};
+        ORDER BY update_datetime DESC LIMIT #{page},#{page_size};
 
   */}, {
     keyword: data.wd,
@@ -74,7 +74,7 @@ var allLinkList = function(data){
   return multiline(function(){/*
 
     SELECT * FROM `tb_link` WHERE category_id=#{category_id}
-      ORDER BY update_datetime LIMIT #{page},#{page_size};
+      ORDER BY update_datetime DESC LIMIT #{page},#{page_size};
 
   */}, {
     keyword: data.keyword,

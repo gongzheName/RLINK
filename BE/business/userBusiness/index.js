@@ -66,35 +66,55 @@ function SelectAll(req, res){
   try {
 
     req.body.page = (req.body.page-1)*(req.body.page_size);
+    req.body.conditions = typeof req.body.conditions=="undefined"?
+                            {name:"",gender:'',nickname:""}:
+                            JSON.parse(req.body.conditions);
     //SQL
-    var select_all_by_page_tb_user = tbUser.tbUserSelectAll(req.body);
+    var select_all_by_page_tb_user = tbUser.tbUserSelectAllCond(req.body);
 
-    //数据库操作
-    conn.query(select_all_by_page_tb_user, {}, function (err, rows, fields) {
-      if(err){//操作失败
-        console.log(err);
-        res.send({resp_cd:"01",resp_msg:"系统错误，请稍后重试！"});
+    //总数
+    var total_record_tb_user = tbUser.tbUserTotal(req.body.conditions);
+    var promise = new Promise(function(resolve, reject){
+      //数据库操作
+      conn.query(total_record_tb_user, {}, function(err, rows, fields){
+        if(err){//操作失败
+          console.log(err);
+          res.send({resp_cd:"01",resp_msg:"系统错误，请稍后重试！"});
+          return;
+        }
+        resolve(parseInt(rows[0]["COUNT(*)"]));
+      })
+    }).then(function(total_record){
+      //数据库操作
+      conn.query(select_all_by_page_tb_user, {}, function (err, rows, fields) {
+        if(err){//操作失败
+          console.log(err);
+          res.send({resp_cd:"01",resp_msg:"系统错误，请稍后重试！"});
+          return;
+        }
+
+        var data = [];
+        rows.forEach(function(item, index){
+          data.push({
+            id:item.id,
+            name:item.name,
+            gender:item.gender,
+            nickname:item.nickname
+          })
+        });
+
+        //操作成功返回数据
+        var responseData={};
+        responseData.resp_cd="00";
+        responseData.resp_msg="分页查询成功";
+        responseData.total_record=total_record;
+        responseData.data=data;
+        res.send(responseData);
         return;
-      }
-
-      var data = [];
-      rows.forEach(function(item, index){
-        data.push({
-          id:item.id,
-          name:item.name,
-          gender:item.gender,
-          nickname:item.nickname
-        })
       });
+    })
 
-      //操作成功返回数据
-      var responseData={};
-      responseData.resp_cd="00";
-      responseData.resp_msg="分页查询成功";
-      responseData.data=data;
-      res.send(responseData);
-      return;
-    });
+
 
   }catch(err){//运行错误
     console.log(err);

@@ -37,15 +37,52 @@ var tbLinkUpdate  = function(data){
 }
 
 
+var tbLinkTotal = function(data){
+  var sql = "SELECT COUNT(*) FROM `tb_link` WHERE ";
+  if(data.name){
+    sql = sql + "name='"+data.name+"' AND ";
+  }
+  if(data.link){
+    sql = sql + "link='"+data.link+"' AND ";
+  }
+  if(data.link_check_state){
+    sql = sql + "link_check_state='"+data.link_check_state+"'";
+  }
+  sql += ";";
+  sql = sql.replace("AND ;", ";");
+  sql = sql.replace("WHERE ;", ";");
+  return sql;
+
+}
+
+
 var tbLinkSelectAll  = function(data){
   return multiline(function(){/*
 
-    SELECT * FROM `tb_link` LIMIT #{page},#{page_size};
+    SELECT * FROM `tb_link` ORDER BY update_time DESC LIMIT #{page},#{page_size};
 
   */}, {
     page: data.page,
     page_size: data.page_size
   });
+}
+
+
+var tbLinkSelectAllCond = function(data){
+  var sql = "SELECT * FROM `tb_link` WHERE ";
+  if(data.conditions.name){
+    sql = sql + "name='"+data.conditions.name+"' AND ";
+  }
+  if(data.conditions.gender){
+    sql = sql + "category_id='"+data.conditions.category_id+"' AND ";
+  }
+  if(data.conditions.nickname){
+    sql = sql + "link_check_state='"+data.conditions.link_check_state+"' AND ";
+  }
+  sql = sql + "ORDER BY update_datetime DESC LIMIT " + data.page+", "+data.page_size+";";
+  sql = sql.replace("AND ORDER", "ORDER");
+  sql = sql.replace("WHERE ORDER", "ORDER");
+  return sql;
 }
 
 
@@ -81,6 +118,8 @@ var tbLinkDelete = function(user_ids){
 module.exports = {
   tbLinkAdd:tbLinkAdd,
   tbLinkSelectAll:tbLinkSelectAll,
+  tbLinkSelectAllCond:tbLinkSelectAllCond,
+  tbLinkTotal:tbLinkTotal,
   tbLinkFindByPkId:tbLinkFindByPkId,
   tbLinkUpdate:tbLinkUpdate,
   tbLinkDelete:tbLinkDelete

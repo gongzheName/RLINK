@@ -67,56 +67,76 @@ function SelectAll(req, res){
   try {
 
     req.body.page = (req.body.page-1)*(req.body.page_size);
+    req.body.conditions = typeof req.body.conditions=="undefined"?
+                            {name:"",category_id:'',link_check_state:""}:
+                            JSON.parse(req.body.conditions);
     //SQL
-    var select_all_by_page_tb_link = tbLink.tbLinkSelectAll(req.body), responseData={};
+    var select_all_by_page_tb_link = tbLink.tbLinkSelectAllCond(req.body),
+        responseData={};
 
-    //数据库操作
-    conn.query(select_all_by_page_tb_link, {}, function (err, rows, fields) {
-      if(err){//操作失败
-        console.log(err);
-        res.send({resp_cd:"01",resp_msg:"系统错误，请稍后重试！"});
-        return;
-      }
+    //总数
+    var total_record_tb_link = tbLink.tbLinkTotal(req.body.conditions);
+    new Promise(function(resolve1, reject1){
+      conn.query(total_record_tb_link, {}, function(err, rows, fields){
+        if(err){//操作失败
+          console.log(err);
+          res.send({resp_cd:"01",resp_msg:"系统错误，请稍后重试！"});
+          return;
+        }
+        resolve1(parseInt(rows[0]["COUNT(*)"]));
+      })
+    }).then(function(total_record){
+      //数据库操作
+      conn.query(select_all_by_page_tb_link, {}, function (err, rows, fields) {
+        if(err){//操作失败
+          console.log(err);
+          res.send({resp_cd:"01",resp_msg:"系统错误，请稍后重试！"});
+          return;
+        }
 
-      if(rows.length <= 0){
-        responseData.resp_cd="00";
-        responseData.resp_msg="分页查询成功";
-        responseData.data=[];
-        res.send(responseData);
-      }else{
-        var data = [];
-        rows.forEach(function(item, index){
+        if(rows.length <= 0){
+          responseData.resp_cd="00";
+          responseData.resp_msg="分页查询成功";
+          responseData.total_record=total_record;
+          responseData.data=[];
+          res.send(responseData);
+        }else{
+          var data = [];
+          rows.forEach(function(item, index){
 
-          var promise = new Promise(function(resolve, reject){
-            conn.query("SELECT name FROM tb_category WHERE id="+item.category_id,
-              {}, function(err, rowsIn, field){
-              if(err){//操作失败
-                console.log(err);
-                res.send({resp_cd:"01",resp_msg:"系统错误，请稍后重试！"});
-                return;
+            new Promise(function(resolve, reject){
+              conn.query("SELECT name FROM tb_category WHERE id="+item.category_id,
+                {}, function(err, rowsIn, field){
+                  if(err){//操作失败
+                    console.log(err);
+                    res.send({resp_cd:"01",resp_msg:"系统错误，请稍后重试！"});
+                    return;
+                  }
+                  resolve(rowsIn[0].name);
+                });
+            }).then(function(value){
+              data.push({
+                id:item.id,
+                name:item.name,
+                link:item.link,
+                //category_id:item.category_id,
+                category_id:value,
+                link_check_state:item.link_check_state
+              })
+              if(++index == rows.length || (rows.length==0)){
+                //操作成功返回数据
+                responseData.resp_cd="00";
+                responseData.resp_msg="分页查询成功";
+                responseData.total_record=total_record;
+                responseData.data=data;
+                res.send(responseData);
               }
-              resolve(rowsIn[0].name);
-            });
-          }).then(function(value){
-            data.push({
-              id:item.id,
-              name:item.name,
-              link:item.link,
-              //category_id:item.category_id,
-              category_id:value,
-              link_check_state:item.link_check_state
             })
-            if(++index == rows.length || (rows.length==0)){
-              //操作成功返回数据
-              responseData.resp_cd="00";
-              responseData.resp_msg="分页查询成功";
-              responseData.data=data;
-              res.send(responseData);
-            }
-          })
-        });
-      }
-    });
+          });
+        }
+      });
+    })
+
 
   }catch(err){//运行错误
     console.log(err);
